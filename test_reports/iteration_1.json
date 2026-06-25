@@ -1,0 +1,42 @@
+{
+  "summary": "Chroma Paints frontend smoke pass. 15/15 effective flows working after correcting two test-script selector mismatches. One minor spec drift found (tile-gallery-items vs requested tile-gallery) and one spec drift (gallery-item-{id} vs requested gallery-tile). All public + admin core flows functional.",
+  "tested_scope": ["frontend", "integration"],
+  "passed": [
+    "Home loads with hero + nav links (Products, Colors, Gallery, Contact)",
+    "WhatsApp FAB visible on public pages (whatsapp-fab)",
+    "Products list renders 6 cards; filter-category-interior + filter-finish-matte clickable and apply",
+    "Product card click navigates to /products/{id} detail page",
+    "Colors page renders 20 color cards; color-family-greens filter works",
+    "Gallery renders 4 tiles; lightbox opens and lightbox-close dismisses it",
+    "Contact form: inquiry-name + inquiry-phone + submit -> inquiry-success screen appears",
+    "Admin login at /admin/login with seeded creds succeeds, redirects to /admin",
+    "Admin overview tiles render (tile-products, tile-colors, tile-gallery-items, tile-inquiries)",
+    "Admin sidebar nav (products/colors/gallery/inquiries) routes correctly",
+    "Admin Products: create-product opens drawer; form-name+category+finish+image+save creates product and row appears",
+    "Admin Inquiries: public-submitted inquiry visible in admin list",
+    "Admin Inquiries: status select (native <select>) updates to in_progress and toast 'Updated' shown",
+    "Admin logout clears session and returns to /admin/login"
+  ],
+  "failed": [
+    {
+      "area": "spec-drift / data-testid naming",
+      "issue": "AdminOverview tile for gallery uses data-testid='tile-gallery-items' (label='Gallery items') while the test request expects 'tile-gallery'.",
+      "evidence": "Actual testids on /admin: ['tile-products','tile-colors','tile-gallery-items','tile-inquiries']. Source: /app/frontend/src/pages/admin/AdminOverview.jsx line 27 label 'Gallery items' -> testid generated from label.",
+      "priority": "LOW"
+    },
+    {
+      "area": "spec-drift / data-testid naming",
+      "issue": "Gallery tiles use data-testid='gallery-item-{id}' while the test request mentions 'gallery-tile'. Lightbox + lightbox-close testids match spec.",
+      "evidence": "/app/frontend/src/pages/Gallery.jsx line 34: data-testid={`gallery-item-${g.id}`}",
+      "priority": "LOW"
+    }
+  ],
+  "action_items": [
+    "Optional: rename AdminOverview gallery tile to data-testid='tile-gallery' (or change label to 'Gallery') for consistency with spec.",
+    "Optional: rename Gallery tile testid to 'gallery-tile-{id}' for consistency with spec.",
+    "Neither blocks first-finish — both are naming consistency only; underlying flows fully functional."
+  ],
+  "success_rate": {"backend": "n/a (not retested this iteration)", "frontend": "100% on functional flows; 2 LOW naming drifts"},
+  "retest_needed": false,
+  "full_testing_deferred": true
+}
