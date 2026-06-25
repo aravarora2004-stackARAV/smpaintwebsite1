@@ -16,7 +16,7 @@ const LOGO_URL = "https://customer-assets.emergentagent.com/job_color-explorer-6
 
 export function PublicLayout({ children }) {
   const [open, setOpen] = useState(false);
-  const [cfg, setCfg] = useState({ brand: "SM Paint Industries", tagline: "Confidence of Quality & Durability | Since 1982", whatsapp_number: "", logo_url: LOGO_URL });
+  const [cfg, setCfg] = useState({ brand: "SM Paint Industries", tagline: "Confidence of Quality & Durability | Since 1983", whatsapp_number: "", logo_url: LOGO_URL });
   const loc = useLocation();
 
   useEffect(() => {
@@ -98,7 +98,7 @@ export function PublicLayout({ children }) {
               </span>
               <div>
                 <div className="font-display text-lg">SM PAINT INDUSTRIES</div>
-                <div className="text-[10px] tracking-[0.22em] uppercase text-white/60 mt-1">Industrial Coatings · Est. 1982</div>
+                <div className="text-[10px] tracking-[0.22em] uppercase text-white/60 mt-1">Industrial Coatings · Est. 1983</div>
               </div>
             </div>
             <p className="text-sm text-white/70 max-w-md leading-relaxed">
@@ -126,7 +126,7 @@ export function PublicLayout({ children }) {
         <div className="border-t border-white/10">
           <div className="max-w-7xl mx-auto px-6 lg:px-12 py-5 text-xs text-white/50 flex flex-col md:flex-row justify-between gap-2">
             <span>© {new Date().getFullYear()} SM Paint Industries. All rights reserved.</span>
-            <span className="font-mono">CONFIDENCE OF QUALITY · DURABILITY · SINCE 1982</span>
+            <span className="font-mono">CONFIDENCE OF QUALITY · DURABILITY · SINCE 1983</span>
           </div>
         </div>
       </footer>

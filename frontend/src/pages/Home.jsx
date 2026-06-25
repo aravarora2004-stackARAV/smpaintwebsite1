@@ -28,7 +28,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-6 lg:px-12 pt-14 pb-20 lg:pt-20 lg:pb-28 grid lg:grid-cols-12 gap-10 lg:gap-16 items-end">
           <div className="lg:col-span-7 fade-up">
             <div className="flex items-center gap-3 mb-6">
-              <span className="overline" style={{ color: "var(--navy)" }}>Est. 1982</span>
+              <span className="overline" style={{ color: "var(--navy)" }}>Est. 1983</span>
               <span className="w-12 h-px bg-neutral-400" />
               <span className="overline text-neutral-500">Manufactured in India</span>
             </div>
@@ -70,7 +70,7 @@ export default function Home() {
                 </div>
               </div>
               <div className="absolute -top-4 -right-4 px-3 py-1.5 text-[10px] uppercase tracking-[0.22em] font-bold" style={{ background: "var(--paint-yellow)", color: "var(--navy)" }}>
-                Since 1982
+                Since 1983
               </div>
             </div>
           </div>
