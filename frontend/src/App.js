@@ -6,6 +6,7 @@ import { AuthProvider } from "./lib/auth.jsx";
 import { PublicLayout } from "./components/PublicLayout";
 
 import Home from "./pages/Home";
+import Brands from "./pages/Brands";
 import Products from "./pages/Products";
 import ProductDetail from "./pages/ProductDetail";
 import Colors from "./pages/Colors";
@@ -28,6 +29,7 @@ export default function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={withLayout(<Home />)} />
+          <Route path="/brands" element={withLayout(<Brands />)} />
           <Route path="/products" element={withLayout(<Products />)} />
           <Route path="/products/:id" element={withLayout(<ProductDetail />)} />
           <Route path="/colors" element={withLayout(<Colors />)} />

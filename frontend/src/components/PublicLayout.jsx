@@ -5,65 +5,82 @@ import { api } from "../lib/api";
 
 const links = [
   { to: "/", label: "Home" },
+  { to: "/brands", label: "Brands" },
   { to: "/products", label: "Products" },
-  { to: "/colors", label: "Colors" },
+  { to: "/colors", label: "Shade Card" },
   { to: "/gallery", label: "Gallery" },
   { to: "/contact", label: "Contact" },
 ];
 
+const LOGO_URL = "https://customer-assets.emergentagent.com/job_color-explorer-6/artifacts/iu3nu4xy_sm%20paints%20final%20logo%20more.png";
+
 export function PublicLayout({ children }) {
   const [open, setOpen] = useState(false);
-  const [cfg, setCfg] = useState({ brand: "Chroma Paints", whatsapp_number: "" });
+  const [cfg, setCfg] = useState({ brand: "SM Paint Industries", tagline: "Confidence of Quality & Durability | Since 1982", whatsapp_number: "", logo_url: LOGO_URL });
   const loc = useLocation();
 
   useEffect(() => {
     api.get("/site/config").then((r) => setCfg(r.data)).catch(() => {});
   }, []);
-
   useEffect(() => { setOpen(false); }, [loc.pathname]);
 
   return (
     <div className="min-h-screen flex flex-col" style={{ background: "var(--bg)" }}>
+      {/* Top bar — tagline */}
+      <div className="hidden md:block" style={{ background: "var(--navy)", color: "#fff" }}>
+        <div className="max-w-7xl mx-auto px-6 lg:px-12 h-9 flex items-center justify-between text-[11px] tracking-[0.18em] uppercase font-medium">
+          <span>{cfg.tagline}</span>
+          <span className="flex items-center gap-6">
+            <span>Vespa</span>
+            <span style={{ color: "var(--paint-yellow)" }}>·</span>
+            <span>Galleria</span>
+          </span>
+        </div>
+      </div>
+
+      <div className="paint-strip" />
+
       <header
         className="sticky top-0 z-40 backdrop-blur-xl"
-        style={{ background: "rgba(249,248,246,0.78)", borderBottom: "1px solid var(--border)" }}
+        style={{ background: "rgba(245,242,236,0.92)", borderBottom: "1px solid var(--border)" }}
         data-testid="public-header"
       >
         <div className="max-w-7xl mx-auto px-6 lg:px-12 h-20 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-3" data-testid="brand-link">
-            <span className="block w-8 h-8" style={{ background: "linear-gradient(135deg,#B65A4B 0%,#8C9986 50%,#2E3A59 100%)" }} />
-            <span className="font-display text-xl tracking-tight">{cfg.brand}</span>
+            <span className="w-11 h-11 flex items-center justify-center" style={{ background: "var(--navy)" }}>
+              <img src={cfg.logo_url || LOGO_URL} alt="SM" className="w-9 h-9 object-contain" />
+            </span>
+            <span>
+              <div className="font-display text-base leading-none">SM PAINT</div>
+              <div className="text-[10px] tracking-[0.22em] uppercase text-neutral-500 mt-0.5">Industries</div>
+            </span>
           </Link>
-          <nav className="hidden md:flex items-center gap-10">
+
+          <nav className="hidden lg:flex items-center gap-9">
             {links.map((l) => (
               <Link
                 key={l.to}
                 to={l.to}
-                className={`text-sm tracking-wide transition-colors ${loc.pathname === l.to ? "text-black" : "text-neutral-500 hover:text-black"}`}
-                data-testid={`nav-${l.label.toLowerCase()}`}
+                className={`text-[13px] font-semibold tracking-wide transition-colors uppercase ${loc.pathname === l.to ? "text-[color:var(--navy)]" : "text-neutral-500 hover:text-[color:var(--navy)]"}`}
+                data-testid={`nav-${l.label.toLowerCase().replace(/\s/g,'-')}`}
               >
                 {l.label}
               </Link>
             ))}
-            <Link to="/contact" className="btn-line" data-testid="nav-cta-quote">Request Quote</Link>
+            <Link to="/contact" className="btn-solid !py-2.5 !px-5 text-xs" data-testid="nav-cta-quote">Request Quote</Link>
           </nav>
-          <button
-            className="md:hidden p-2"
-            onClick={() => setOpen(!open)}
-            data-testid="nav-mobile-toggle"
-            aria-label="menu"
-          >
+
+          <button className="lg:hidden p-2" onClick={() => setOpen(!open)} data-testid="nav-mobile-toggle" aria-label="menu">
             {open ? <X size={20} /> : <Menu size={20} />}
           </button>
         </div>
         {open && (
-          <div className="md:hidden border-t" style={{ borderColor: "var(--border)" }}>
+          <div className="lg:hidden border-t" style={{ borderColor: "var(--border)" }}>
             <div className="px-6 py-6 flex flex-col gap-5">
               {links.map((l) => (
-                <Link key={l.to} to={l.to} className="text-base" data-testid={`nav-mobile-${l.label.toLowerCase()}`}>
-                  {l.label}
-                </Link>
+                <Link key={l.to} to={l.to} className="text-base font-semibold" data-testid={`nav-mobile-${l.label.toLowerCase().replace(/\s/g,'-')}`}>{l.label}</Link>
               ))}
+              <Link to="/contact" className="btn-solid mt-2 text-center">Request Quote</Link>
             </div>
           </div>
         )}
@@ -71,36 +88,45 @@ export function PublicLayout({ children }) {
 
       <main className="flex-1">{children}</main>
 
-      <footer className="mt-24 border-t" style={{ borderColor: "var(--border)" }} data-testid="public-footer">
-        <div className="max-w-7xl mx-auto px-6 lg:px-12 py-16 grid md:grid-cols-4 gap-12">
-          <div className="md:col-span-2">
-            <div className="font-display text-3xl mb-4">{cfg.brand}</div>
-            <p className="text-sm text-neutral-600 max-w-md leading-relaxed">
-              A manufacturer of architectural finishes, premium emulsions, and a curated color
-              library — built for designers, contractors, and discerning homeowners.
+      <footer style={{ background: "var(--navy)", color: "#fff" }} data-testid="public-footer">
+        <div className="paint-strip" />
+        <div className="max-w-7xl mx-auto px-6 lg:px-12 py-16 grid md:grid-cols-12 gap-12">
+          <div className="md:col-span-5">
+            <div className="flex items-center gap-3 mb-5">
+              <span className="w-12 h-12 flex items-center justify-center bg-white/5 border border-white/15">
+                <img src={cfg.logo_url || LOGO_URL} alt="SM" className="w-10 h-10 object-contain" />
+              </span>
+              <div>
+                <div className="font-display text-lg">SM PAINT INDUSTRIES</div>
+                <div className="text-[10px] tracking-[0.22em] uppercase text-white/60 mt-1">Industrial Coatings · Est. 1982</div>
+              </div>
+            </div>
+            <p className="text-sm text-white/70 max-w-md leading-relaxed">
+              Manufacturers of industrial and decorative coatings under the <span className="text-white font-semibold">Vespa</span> and <span className="text-white font-semibold">Galleria</span> lines. Engineered to endure — trusted by builders, contractors, and homeowners across India for over four decades.
             </p>
           </div>
-          <div>
-            <div className="overline text-neutral-500 mb-4">Explore</div>
-            <div className="flex flex-col gap-2 text-sm">
-              {links.map((l) => (<Link key={l.to} to={l.to} className="hover:text-black text-neutral-600">{l.label}</Link>))}
+          <div className="md:col-span-3">
+            <div className="overline text-white/50 mb-4">Explore</div>
+            <div className="flex flex-col gap-2.5 text-sm">
+              {links.map((l) => (<Link key={l.to} to={l.to} className="hover:text-[color:var(--paint-yellow)] text-white/80">{l.label}</Link>))}
             </div>
           </div>
-          <div>
-            <div className="overline text-neutral-500 mb-4">Contact</div>
-            <div className="text-sm text-neutral-600 space-y-1">
-              <div>hello@chromapaints.com</div>
+          <div className="md:col-span-4">
+            <div className="overline text-white/50 mb-4">Contact</div>
+            <div className="text-sm text-white/80 space-y-1.5">
+              <div>hello@smpaints.com</div>
               <div>+91 9999 999 999</div>
-              <div className="pt-3">
-                <Link to="/admin/login" className="text-xs text-neutral-400 hover:text-black" data-testid="footer-admin-link">Dealer / Admin</Link>
+              <div>Manufacturing unit · India</div>
+              <div className="pt-4">
+                <Link to="/admin/login" className="text-xs text-white/40 hover:text-white" data-testid="footer-admin-link">Dealer / Admin login</Link>
               </div>
             </div>
           </div>
         </div>
-        <div className="border-t" style={{ borderColor: "var(--border)" }}>
-          <div className="max-w-7xl mx-auto px-6 lg:px-12 py-6 text-xs text-neutral-500 flex justify-between">
-            <span>© {new Date().getFullYear()} {cfg.brand}. All rights reserved.</span>
-            <span className="font-mono">made with color.</span>
+        <div className="border-t border-white/10">
+          <div className="max-w-7xl mx-auto px-6 lg:px-12 py-5 text-xs text-white/50 flex flex-col md:flex-row justify-between gap-2">
+            <span>© {new Date().getFullYear()} SM Paint Industries. All rights reserved.</span>
+            <span className="font-mono">CONFIDENCE OF QUALITY · DURABILITY · SINCE 1982</span>
           </div>
         </div>
       </footer>
@@ -110,7 +136,7 @@ export function PublicLayout({ children }) {
           href={`https://wa.me/${cfg.whatsapp_number}`}
           target="_blank"
           rel="noreferrer"
-          className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full flex items-center justify-center shadow-lg transition-transform hover:scale-105"
+          className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full flex items-center justify-center shadow-xl transition-transform hover:scale-105"
           style={{ background: "#25D366", color: "white" }}
           data-testid="whatsapp-fab"
           aria-label="Chat on WhatsApp"

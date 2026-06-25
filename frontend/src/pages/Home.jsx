@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, ArrowUpRight } from "lucide-react";
+import { ArrowRight, ArrowUpRight, ShieldCheck, Award, Factory, Beaker } from "lucide-react";
 import { api } from "../lib/api";
+
+const LOGO = "https://customer-assets.emergentagent.com/job_color-explorer-6/artifacts/iu3nu4xy_sm%20paints%20final%20logo%20more.png";
 
 export default function Home() {
   const [products, setProducts] = useState([]);
@@ -9,125 +11,200 @@ export default function Home() {
   const [gallery, setGallery] = useState([]);
 
   useEffect(() => {
-    api.get("/products?featured=true").then((r) => setProducts(r.data.slice(0, 4))).catch(() => {});
-    api.get("/colors").then((r) => setColors(r.data.slice(0, 12))).catch(() => {});
-    api.get("/gallery").then((r) => setGallery(r.data.slice(0, 4))).catch(() => {});
+    api.get("/products?featured=true").then((r) => setProducts(r.data));
+    api.get("/colors").then((r) => setColors(r.data));
+    api.get("/gallery").then((r) => setGallery(r.data.slice(0, 4)));
   }, []);
+
+  // Pick a representative spread of bold shades for the strip
+  const heroColors = colors.filter(c =>
+    ["Polka","Sunrise","Signal Red","Electric Blue Plus","Mehendi-N","Noble Blue","Warm Gold","Royal Rose","Brazilian Forest"].includes(c.name)
+  ).slice(0, 8);
 
   return (
     <div data-testid="home-page">
       {/* HERO */}
-      <section className="relative overflow-hidden" data-testid="hero-section">
-        <div className="max-w-7xl mx-auto px-6 lg:px-12 pt-16 pb-24 lg:pt-24 lg:pb-32 grid lg:grid-cols-12 gap-12 items-end">
+      <section className="relative overflow-hidden" data-testid="hero-section" style={{ background: "var(--bg)" }}>
+        <div className="max-w-7xl mx-auto px-6 lg:px-12 pt-14 pb-20 lg:pt-20 lg:pb-28 grid lg:grid-cols-12 gap-10 lg:gap-16 items-end">
           <div className="lg:col-span-7 fade-up">
-            <div className="overline text-neutral-500 mb-6">Est. 2018 — Manufacturer of architectural finishes</div>
-            <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl leading-[1.02] tracking-tight">
-              Color, considered.<br />
-              <span className="italic text-neutral-500">Made by hand.</span>
+            <div className="flex items-center gap-3 mb-6">
+              <span className="overline" style={{ color: "var(--navy)" }}>Est. 1982</span>
+              <span className="w-12 h-px bg-neutral-400" />
+              <span className="overline text-neutral-500">Manufactured in India</span>
+            </div>
+            <h1 className="font-display text-[44px] sm:text-6xl lg:text-[80px] leading-[0.95] tracking-tight" style={{ color: "var(--ink)" }}>
+              INDUSTRIAL<br />
+              COATINGS.<br />
+              <span style={{ color: "var(--navy)" }}>ENGINEERED</span> <span className="font-serif-italic text-[0.85em]">to endure.</span>
             </h1>
-            <p className="mt-8 text-neutral-600 max-w-xl text-base leading-relaxed">
-              Chroma Paints crafts low-VOC emulsions, weather-resilient exteriors, and a deeply
-              edited color library — designed for residential, commercial, and heritage projects
-              across India.
+            <p className="mt-7 text-neutral-700 max-w-xl text-base lg:text-[17px] leading-relaxed">
+              SM Paint Industries manufactures decorative and industrial coatings under two trusted brands —
+              <span className="font-semibold"> Vespa</span> for everyday workhorse performance, and
+              <span className="font-semibold"> Galleria</span> for premium, specification-grade finishes.
             </p>
-            <div className="mt-10 flex items-center gap-4">
-              <Link to="/products" className="btn-solid" data-testid="hero-cta-products">Explore Products <ArrowRight size={16} className="ml-2" /></Link>
-              <Link to="/colors" className="btn-line" data-testid="hero-cta-colors">Browse Colors</Link>
+            <div className="mt-9 flex items-center gap-4 flex-wrap">
+              <Link to="/products" className="btn-solid" data-testid="hero-cta-products">View Catalogue <ArrowRight size={16} className="ml-2" /></Link>
+              <Link to="/colors" className="btn-line" data-testid="hero-cta-colors">Open Shade Card</Link>
+            </div>
+
+            <div className="mt-12 grid grid-cols-2 sm:grid-cols-4 gap-6 max-w-2xl">
+              <Stat n="40+" label="Years in business" />
+              <Stat n="2" label="Brand lines" />
+              <Stat n="116" label="Curated shades" />
+              <Stat n="9" label="Product range" />
             </div>
           </div>
-          <div className="lg:col-span-5">
-            <div className="aspect-[4/5] relative overflow-hidden" style={{ background: "#EDE6D6" }}>
-              <img
-                src="https://images.unsplash.com/photo-1759774313632-854207c22ec1?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA3MDB8MHwxfHNlYXJjaHwxfHxsdXh1cmlvdXMlMjBsaXZpbmclMjByb29tJTIwcGFpbnRlZCUyMHdhbGwlMjBpbnRlcmlvciUyMGRlc2lnbnxlbnwwfHx8fDE3ODIzNzQ2NTB8MA&ixlib=rb-4.1.0&q=85"
-                alt="Painted interior"
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute bottom-6 left-6 right-6 flex items-end justify-between">
-                <div className="text-white font-mono text-xs uppercase tracking-[0.22em] drop-shadow">CP-G01 · Sage</div>
-                <div className="w-12 h-12" style={{ background: "#8C9986", border: "2px solid white" }} />
+
+          <div className="lg:col-span-5 fade-up">
+            <div className="relative aspect-square">
+              {/* Navy block with logo */}
+              <div className="absolute inset-0 flex items-center justify-center" style={{ background: "var(--navy)" }}>
+                <img src={LOGO} alt="SM Paint Industries" className="w-3/4 h-3/4 object-contain" />
+              </div>
+              {/* Floating chip */}
+              <div className="absolute -bottom-5 -left-5 bg-white border border-neutral-200 px-5 py-4 shadow-sm">
+                <div className="overline text-neutral-500 mb-1">Two brands</div>
+                <div className="flex items-center gap-3">
+                  <span className="line-pill vespa">Vespa</span>
+                  <span className="line-pill galleria">Galleria</span>
+                </div>
+              </div>
+              <div className="absolute -top-4 -right-4 px-3 py-1.5 text-[10px] uppercase tracking-[0.22em] font-bold" style={{ background: "var(--paint-yellow)", color: "var(--navy)" }}>
+                Since 1982
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* MARQUEE / STRIP */}
-      <section className="border-y" style={{ borderColor: "var(--border)" }}>
-        <div className="max-w-7xl mx-auto px-6 lg:px-12 py-6 flex flex-wrap items-center justify-between gap-6 text-xs uppercase tracking-[0.22em] text-neutral-500">
-          <span>Low VOC</span><span>·</span>
-          <span>BIS Certified</span><span>·</span>
-          <span>Anti-algal Technology</span><span>·</span>
-          <span>20+ Color Families</span><span>·</span>
-          <span>Made in India</span>
+      {/* COLOR STRIP — DRIPS */}
+      <section style={{ background: "var(--ink)" }}>
+        <div className="max-w-7xl mx-auto px-6 lg:px-12 py-6 flex items-center gap-6 overflow-x-auto">
+          <span className="overline text-white/60 whitespace-nowrap">Featured shades</span>
+          <div className="flex items-stretch gap-3 flex-1">
+            {heroColors.map((c) => (
+              <div key={c.id} className="flex items-center gap-3 whitespace-nowrap">
+                <span className="w-6 h-6 border border-white/30" style={{ background: c.hex }} />
+                <span className="text-xs text-white/80">{c.name}</span>
+              </div>
+            ))}
+          </div>
+          <Link to="/colors" className="text-xs text-white/80 hover:text-white flex items-center gap-1 whitespace-nowrap">All shades <ArrowUpRight size={14} /></Link>
+        </div>
+      </section>
+
+      {/* TWO BRANDS */}
+      <section className="max-w-7xl mx-auto px-6 lg:px-12 py-24" data-testid="brands-section">
+        <div className="flex items-end justify-between mb-12">
+          <div>
+            <div className="overline text-neutral-500 mb-3">Brand Architecture</div>
+            <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl" style={{ color: "var(--ink)" }}>
+              Two brands, <span style={{ color: "var(--navy)" }}>one standard.</span>
+            </h2>
+          </div>
+          <Link to="/brands" className="text-sm flex items-center gap-1 hover:gap-2 transition-all" data-testid="see-brands">Learn more <ArrowUpRight size={16} /></Link>
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-6">
+          {/* Vespa Card */}
+          <div className="relative bg-white border border-neutral-200 p-10 group hover:-translate-y-1 transition-transform" data-testid="brand-card-vespa">
+            <div className="flex items-start justify-between mb-8">
+              <span className="line-pill vespa">Standard line</span>
+              <span className="font-mono text-xs text-neutral-500">01</span>
+            </div>
+            <h3 className="font-display text-5xl mb-2" style={{ color: "var(--ink)" }}>VESPA</h3>
+            <div className="font-serif-italic text-lg text-neutral-500 mb-6">Reliable. Workhorse.</div>
+            <p className="text-neutral-700 leading-relaxed mb-8">
+              Vespa delivers reliable, workhorse coatings for everyday industrial and decorative needs — trusted on construction sites, factories, and homes across India.
+            </p>
+            <div className="grid grid-cols-2 gap-y-3 text-sm border-t border-neutral-200 pt-6">
+              <div><div className="overline text-neutral-500 mb-1">Range</div><div>4 products</div></div>
+              <div><div className="overline text-neutral-500 mb-1">Best for</div><div>Daily use</div></div>
+              <div><div className="overline text-neutral-500 mb-1">Coverage</div><div>12-15 m²/lt</div></div>
+              <div><div className="overline text-neutral-500 mb-1">Pricing</div><div>Workhorse value</div></div>
+            </div>
+            <Link to="/products?line=vespa" className="mt-8 inline-flex items-center gap-2 text-sm font-semibold" style={{ color: "var(--navy)" }} data-testid="explore-vespa">
+              Explore Vespa <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+            </Link>
+          </div>
+
+          {/* Galleria Card */}
+          <div className="relative border p-10 group hover:-translate-y-1 transition-transform overflow-hidden" style={{ background: "var(--navy)", color: "#fff", borderColor: "var(--navy)" }} data-testid="brand-card-galleria">
+            <div className="absolute top-0 right-0 w-32 h-32 opacity-20" style={{ background: "radial-gradient(circle at top right, var(--paint-yellow), transparent 70%)" }} />
+            <div className="flex items-start justify-between mb-8 relative">
+              <span className="line-pill galleria !bg-white !text-[color:var(--navy)] !border-white">Premium line</span>
+              <span className="font-mono text-xs text-white/60">02</span>
+            </div>
+            <h3 className="font-display text-5xl mb-2">GALLERIA</h3>
+            <div className="font-serif-italic text-lg text-white/70 mb-6">Premium. Refined.</div>
+            <p className="text-white/85 leading-relaxed mb-8">
+              Galleria is our premium line — engineered for superior coverage, enhanced performance, and a refined finish. High-grade pigments and binders for specification-grade projects.
+            </p>
+            <div className="grid grid-cols-2 gap-y-3 text-sm border-t border-white/20 pt-6">
+              <div><div className="overline text-white/50 mb-1">Range</div><div>5 products</div></div>
+              <div><div className="overline text-white/50 mb-1">Best for</div><div>Specification</div></div>
+              <div><div className="overline text-white/50 mb-1">Coverage</div><div>15-22 m²/lt</div></div>
+              <div><div className="overline text-white/50 mb-1">Pigments</div><div>Fade-resistant</div></div>
+            </div>
+            <Link to="/products?line=galleria" className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-white" data-testid="explore-galleria">
+              Explore Galleria <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+            </Link>
+          </div>
         </div>
       </section>
 
       {/* FEATURED PRODUCTS */}
-      <section className="max-w-7xl mx-auto px-6 lg:px-12 py-24" data-testid="featured-products">
-        <div className="flex items-end justify-between mb-12">
-          <div>
-            <div className="overline text-neutral-500 mb-3">The Catalogue</div>
-            <h2 className="font-display text-4xl sm:text-5xl">Featured finishes</h2>
+      <section style={{ background: "#fff" }} data-testid="featured-products">
+        <div className="max-w-7xl mx-auto px-6 lg:px-12 py-24">
+          <div className="flex items-end justify-between mb-12">
+            <div>
+              <div className="overline text-neutral-500 mb-3">Bestsellers</div>
+              <h2 className="font-display text-4xl sm:text-5xl" style={{ color: "var(--ink)" }}>Featured products</h2>
+            </div>
+            <Link to="/products" className="text-sm flex items-center gap-1 hover:gap-2 transition-all" data-testid="see-all-products">See all <ArrowUpRight size={16} /></Link>
           </div>
-          <Link to="/products" className="text-sm flex items-center gap-1 hover:gap-2 transition-all" data-testid="see-all-products">
-            See all <ArrowUpRight size={16} />
-          </Link>
-        </div>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 stagger">
-          {products.length === 0 && [0, 1, 2, 3].map((i) => (
-            <div key={i} className="aspect-[3/4] bg-neutral-100" />
-          ))}
-          {products.map((p) => (
-            <Link to={`/products/${p.id}`} key={p.id} className="group block" data-testid={`product-card-${p.id}`}>
-              <div className="aspect-[3/4] overflow-hidden hairline bg-white">
-                <img src={p.image_url} alt={p.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
-              </div>
-              <div className="pt-4">
-                <div className="overline text-neutral-500">{p.category}</div>
-                <div className="font-display text-xl mt-1">{p.name}</div>
-                <div className="text-sm text-neutral-500 mt-1 capitalize">{p.finish} finish</div>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </section>
-
-      {/* COLOR LIBRARY TEASER */}
-      <section className="py-24" style={{ background: "#1A1A1A", color: "#F9F8F6" }} data-testid="color-teaser">
-        <div className="max-w-7xl mx-auto px-6 lg:px-12 grid lg:grid-cols-12 gap-12">
-          <div className="lg:col-span-4">
-            <div className="overline text-neutral-400 mb-3">The Color Library</div>
-            <h2 className="font-display text-4xl sm:text-5xl mb-6">A palette curated, not stocked.</h2>
-            <p className="text-neutral-400 leading-relaxed mb-8">
-              Over 200 shades organised across earth, neutrals, greens, blues, and warms.
-              Each shade is hand-mixed at our facility and shipped from a single batch for
-              perfect tonal consistency.
-            </p>
-            <Link to="/colors" className="inline-flex items-center gap-2 text-sm border border-white px-6 py-3 hover:bg-white hover:text-black transition-colors" data-testid="see-all-colors">
-              Open the library <ArrowRight size={16} />
-            </Link>
-          </div>
-          <div className="lg:col-span-8 grid grid-cols-4 gap-3 stagger">
-            {colors.map((c) => (
-              <div key={c.id} className="aspect-square flex flex-col justify-end p-3" style={{ background: c.hex }}>
-                <div className="font-mono text-[10px] uppercase tracking-widest" style={{ color: isLight(c.hex) ? "#1A1A1A" : "#F9F8F6" }}>{c.code}</div>
-                <div className="text-sm" style={{ color: isLight(c.hex) ? "#1A1A1A" : "#F9F8F6" }}>{c.name}</div>
-              </div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 stagger">
+            {products.map((p) => (
+              <Link to={`/products/${p.id}`} key={p.id} className="group block bg-white border border-neutral-200 hover:border-neutral-900 transition-colors" data-testid={`product-card-${p.id}`}>
+                <div className="aspect-[4/3] overflow-hidden bg-neutral-100">
+                  <img src={p.image_url} alt={p.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                </div>
+                <div className="p-6">
+                  <div className="flex items-center justify-between mb-3">
+                    <span className={`line-pill ${p.line}`}>{p.line}</span>
+                    <span className="overline text-neutral-400">{p.category}</span>
+                  </div>
+                  <div className="font-display text-2xl mb-2" style={{ color: "var(--ink)" }}>{p.name.replace(/^(Vespa|Galleria)\s/, "")}</div>
+                  <div className="text-sm text-neutral-500 leading-relaxed line-clamp-2">{p.short_description}</div>
+                  <div className="mt-5 pt-5 border-t border-neutral-200 flex items-center justify-between text-xs">
+                    <span className="font-mono text-neutral-500">{p.coverage}</span>
+                    <span className="font-semibold flex items-center gap-1 group-hover:gap-2 transition-all" style={{ color: "var(--navy)" }}>View specs <ArrowRight size={14} /></span>
+                  </div>
+                </div>
+              </Link>
             ))}
           </div>
         </div>
       </section>
 
+      {/* WHY US */}
+      <section className="max-w-7xl mx-auto px-6 lg:px-12 py-24">
+        <div className="grid md:grid-cols-4 gap-8">
+          <Feature icon={Factory} title="Made since 1982" desc="Four decades of in-house manufacturing in India." />
+          <Feature icon={Beaker} title="Engineered formulas" desc="Continuously upgraded under rigorous quality control." />
+          <Feature icon={ShieldCheck} title="Corrosion resistant" desc="Specification-grade primers and protective coatings." />
+          <Feature icon={Award} title="DO IT RIGHT" desc="Our manufacturing creed — don't regret a single coat." />
+        </div>
+      </section>
+
       {/* GALLERY TEASER */}
-      <section className="max-w-7xl mx-auto px-6 lg:px-12 py-24" data-testid="gallery-teaser">
+      <section className="max-w-7xl mx-auto px-6 lg:px-12 pb-24" data-testid="gallery-teaser">
         <div className="flex items-end justify-between mb-12">
           <div>
             <div className="overline text-neutral-500 mb-3">In Place</div>
-            <h2 className="font-display text-4xl sm:text-5xl">Projects & inspiration</h2>
+            <h2 className="font-display text-4xl sm:text-5xl" style={{ color: "var(--ink)" }}>Projects we{`'`}ve coated</h2>
           </div>
-          <Link to="/gallery" className="text-sm flex items-center gap-1 hover:gap-2 transition-all" data-testid="see-gallery">
-            Visit gallery <ArrowUpRight size={16} />
-          </Link>
+          <Link to="/gallery" className="text-sm flex items-center gap-1 hover:gap-2 transition-all" data-testid="see-gallery">Visit gallery <ArrowUpRight size={16} /></Link>
         </div>
         <div className="grid grid-cols-6 gap-4 stagger">
           {gallery[0] && <Link to="/gallery" className="col-span-6 md:col-span-4 aspect-[16/10] overflow-hidden hairline"><img src={gallery[0].image_url} alt="" className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" /></Link>}
@@ -138,19 +215,15 @@ export default function Home() {
       </section>
 
       {/* CTA */}
-      <section className="max-w-7xl mx-auto px-6 lg:px-12 py-24 border-t" style={{ borderColor: "var(--border)" }} data-testid="home-cta">
-        <div className="grid md:grid-cols-12 gap-12 items-center">
+      <section style={{ background: "var(--ink)", color: "#fff" }} data-testid="home-cta">
+        <div className="max-w-7xl mx-auto px-6 lg:px-12 py-24 grid md:grid-cols-12 gap-10 items-center">
           <div className="md:col-span-7">
-            <h2 className="font-display text-4xl sm:text-5xl leading-tight">
-              Considering Chroma for your project?
-            </h2>
-            <p className="mt-4 text-neutral-600 max-w-xl">
-              Share your space, timeline, and finish preferences. Our team will assemble swatches,
-              product picks, and a pricing estimate within 24 hours.
-            </p>
+            <div className="overline mb-4" style={{ color: "var(--paint-yellow)" }}>Dealer & project enquiries</div>
+            <h2 className="font-display text-4xl sm:text-5xl leading-tight">Need volumes, custom shades, or a project quote?</h2>
+            <p className="mt-5 text-white/70 max-w-xl leading-relaxed">Our sales team will assemble swatches, product picks, and a pricing estimate within 24 hours of your request.</p>
           </div>
           <div className="md:col-span-5 md:text-right">
-            <Link to="/contact" className="btn-solid" data-testid="home-cta-quote">Request a Quote <ArrowRight size={16} className="ml-2" /></Link>
+            <Link to="/contact" className="btn-light" data-testid="home-cta-quote">Request a Quote <ArrowRight size={16} className="ml-2" /></Link>
           </div>
         </div>
       </section>
@@ -158,10 +231,21 @@ export default function Home() {
   );
 }
 
-function isLight(hex) {
-  const c = hex.replace("#", "");
-  const r = parseInt(c.substring(0, 2), 16);
-  const g = parseInt(c.substring(2, 4), 16);
-  const b = parseInt(c.substring(4, 6), 16);
-  return (r * 0.299 + g * 0.587 + b * 0.114) > 165;
+function Stat({ n, label }) {
+  return (
+    <div>
+      <div className="font-display text-3xl lg:text-4xl" style={{ color: "var(--navy)" }}>{n}</div>
+      <div className="text-xs text-neutral-500 mt-1 uppercase tracking-widest">{label}</div>
+    </div>
+  );
+}
+
+function Feature({ icon: Icon, title, desc }) {
+  return (
+    <div className="border-t border-neutral-300 pt-6">
+      <Icon size={22} strokeWidth={1.5} style={{ color: "var(--navy)" }} />
+      <div className="font-display text-lg mt-4">{title}</div>
+      <div className="text-sm text-neutral-600 mt-2 leading-relaxed">{desc}</div>
+    </div>
+  );
 }

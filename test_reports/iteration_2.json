@@ -1,0 +1,37 @@
+{
+  "summary": "Full backend + frontend regression for SM Paint Industries rebrand. 16/16 backend pytest cases pass (100%). All UI flows verified: home/brands/products/product-detail/colors(116)/gallery/contact-prefill/admin login + admin CRUD with new tech schema. 2 minor branding leftovers from Chroma -> SM Paint migration found.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "Public footer (PublicLayout)", "issues": ["Contact email shows 'hello@chromapaints.com' — leftover Chroma branding, should be SM Paint email"]},
+      {"screen": "Admin sidebar/header", "issues": ["Brand label still reads 'Chroma Admin' instead of 'SM Paint Admin' — leftover from rebrand"]}
+    ]
+  },
+  "test_report_links": ["/app/backend/tests/test_sm_paints.py", "/app/test_reports/pytest/pytest_results.xml"],
+  "action_items": [
+    "Replace footer email 'hello@chromapaints.com' with SM Paint contact email in /app/frontend/src/components/PublicLayout.jsx",
+    "Rename 'Chroma Admin' brand text in admin layout to 'SM Paint Admin' (or similar) — likely /app/frontend/src/pages/admin/AdminLayout.jsx",
+    "(Optional) Add data-testid='form-collection' to AdminColors collection <select> for stricter test selector — already works functionally via DOM"
+  ],
+  "critical_code_review_comments": [
+    "server.py is 786 lines — getting large; consider splitting routes/models/seeds into separate modules for maintainability",
+    "Admin password fallback in startup() defaults to 'ChromaAdmin@2025' hardcoded — fine as fallback but should ideally raise if ADMIN_PASSWORD missing in prod",
+    "ProductLine and Finish Literals are well-typed; Pydantic validation is solid",
+    "All endpoints exclude MongoDB _id correctly via projection {'_id': 0}",
+    "CORS allow_origins='*' with allow_credentials=True is a known security issue in prod, but acceptable for preview env",
+    "test_credentials.md still references 'Chroma Paints' header — minor doc consistency"
+  ],
+  "updated_files": ["/app/backend/tests/test_sm_paints.py (new)"],
+  "success_rate": {"backend": "100% (16/16)", "frontend": "100% functional; 2 minor branding leftovers"},
+  "test_credentials": "admin@chromapaints.com / ChromaAdmin@2025 (still works as documented)",
+  "seed_data_creation": "Test data prefixed with TEST_ created via API for product/color/inquiry endpoints and cleaned up in same test run",
+  "retest_needed": false,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "Backend tests at /app/backend/tests/test_sm_paints.py cover site/config, 9 products with vespa(4)/galleria(5) filter, 116 colors across 4 collections, gallery=6, inquiry POST, admin login + new ProductIn schema (line/features/coverage_detail/etc). All passing. Frontend verified end-to-end including filter-line-vespa/galleria URL sync, product detail tech fields, color search, gallery lightbox, contact ?product= prefill (confirmed visually), admin form-line/form-coverage-detail/form-drying/form-recoat/form-application/form-thinner/form-primer/form-shades/form-features all present in create-product drawer. Branding leftovers found: footer email 'hello@chromapaints.com' and admin sidebar 'Chroma Admin' label.",
+  "rca_of_the_issue": "The two branding leftovers are simple string literals not updated during the Chroma -> SM rebrand. Reproduce: (1) load any public page, scroll to footer -> see 'hello@chromapaints.com'; (2) login at /admin/login -> sidebar shows 'Chroma Admin'. Fix: search-replace in /app/frontend/src/components/PublicLayout.jsx and admin layout file."
+}

@@ -11,10 +11,10 @@ import jwt
 from datetime import datetime, timezone, timedelta
 from typing import List, Optional, Literal
 
-from fastapi import FastAPI, APIRouter, Depends, HTTPException, Request, Query
+from fastapi import FastAPI, APIRouter, Depends, HTTPException, Request
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
-from pydantic import BaseModel, Field, EmailStr, ConfigDict
+from pydantic import BaseModel, Field, EmailStr
 
 
 # -------------------- Setup --------------------
@@ -24,13 +24,13 @@ db = client[os.environ['DB_NAME']]
 
 JWT_SECRET = os.environ['JWT_SECRET']
 JWT_ALGO = "HS256"
-ACCESS_TOKEN_MIN = 60 * 24  # 24h (admin sessions)
+ACCESS_TOKEN_MIN = 60 * 24
 
-app = FastAPI(title="Chroma Paints API")
+app = FastAPI(title="SM Paint Industries API")
 api = APIRouter(prefix="/api")
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-logger = logging.getLogger("chroma")
+logger = logging.getLogger("smpaints")
 
 
 # -------------------- Helpers --------------------
@@ -86,21 +86,31 @@ async def require_admin(user: dict = Depends(get_current_user)) -> dict:
 
 
 # -------------------- Models --------------------
-ProductCategory = Literal["interior", "exterior", "primer", "enamel", "distemper"]
-Finish = Literal["matte", "satin", "gloss", "eggshell", "textured"]
+ProductLine = Literal["vespa", "galleria", "general"]
+Finish = Literal["matte", "satin", "gloss", "lustrous", "textured", "transparent"]
 
 
 class ProductIn(BaseModel):
     name: str
-    category: ProductCategory
-    finish: Finish
-    coverage: str = Field(default="", description="e.g. 130-150 sq.ft/litre")
-    pack_sizes: List[str] = Field(default_factory=list)
-    price: Optional[float] = None
+    line: ProductLine = "vespa"
+    category: str  # enamel, primer, distemper, varnish, industrial, etc.
+    finish: Finish = "gloss"
+    short_description: str = ""
     description: str = ""
+    features: List[str] = Field(default_factory=list)
+    coverage: str = ""
+    coverage_detail: str = ""  # e.g. "15-22 m²/lt/coat (20-25 μ DFT)"
+    drying_time: str = ""
+    recoat_time: str = ""
+    application: str = ""  # Brush, Spray, Roller
+    pack_sizes: List[str] = Field(default_factory=list)
+    thinner: str = ""
+    recommended_primer: str = ""
+    available_shades: str = ""
+    price: Optional[float] = None
     image_url: str = ""
-    swatch_color_ids: List[str] = Field(default_factory=list)
     featured: bool = False
+    sort_order: int = 0
 
 
 class ProductOut(ProductIn):
@@ -111,7 +121,8 @@ class ProductOut(ProductIn):
 class ColorIn(BaseModel):
     name: str
     hex: str
-    family: str  # reds, blues, neutrals, greens, yellows, etc.
+    family: str  # whites, beiges, browns, greys, blues, greens, violets, pastels, yellows, peaches, oranges, reds, pinks
+    collection: str = "Whites, Beiges, Browns & Greys"
     code: str = ""
 
 
@@ -123,7 +134,7 @@ class ColorOut(ColorIn):
 class GalleryIn(BaseModel):
     title: str
     image_url: str
-    space: str = ""  # living room, bedroom, exterior, etc.
+    space: str = ""
     description: str = ""
     color_ids: List[str] = Field(default_factory=list)
 
@@ -177,19 +188,22 @@ async def logout():
 # -------------------- Public Routes --------------------
 @api.get("/")
 async def root():
-    return {"name": "Chroma Paints API", "status": "ok"}
+    return {"name": "SM Paint Industries API", "status": "ok"}
 
 
 @api.get("/products", response_model=List[ProductOut])
-async def list_products(category: Optional[str] = None, finish: Optional[str] = None, featured: Optional[bool] = None):
+async def list_products(
+    line: Optional[str] = None,
+    category: Optional[str] = None,
+    finish: Optional[str] = None,
+    featured: Optional[bool] = None,
+):
     q = {}
-    if category:
-        q["category"] = category
-    if finish:
-        q["finish"] = finish
-    if featured is not None:
-        q["featured"] = featured
-    docs = await db.products.find(q, {"_id": 0}).sort("created_at", -1).to_list(500)
+    if line and line != "all": q["line"] = line
+    if category: q["category"] = category
+    if finish: q["finish"] = finish
+    if featured is not None: q["featured"] = featured
+    docs = await db.products.find(q, {"_id": 0}).sort([("sort_order", 1), ("name", 1)]).to_list(500)
     return docs
 
 
@@ -202,11 +216,11 @@ async def get_product(pid: str):
 
 
 @api.get("/colors", response_model=List[ColorOut])
-async def list_colors(family: Optional[str] = None):
+async def list_colors(family: Optional[str] = None, collection: Optional[str] = None):
     q = {}
-    if family:
-        q["family"] = family
-    docs = await db.colors.find(q, {"_id": 0}).sort("family", 1).to_list(1000)
+    if family: q["family"] = family
+    if collection: q["collection"] = collection
+    docs = await db.colors.find(q, {"_id": 0}).to_list(2000)
     return docs
 
 
@@ -219,21 +233,41 @@ async def list_gallery():
 @api.post("/inquiries", response_model=InquiryOut)
 async def create_inquiry(body: InquiryIn):
     doc = body.model_dump()
-    doc.update({
-        "id": str(uuid.uuid4()),
-        "status": "new",
-        "created_at": now_utc(),
-    })
+    doc.update({"id": str(uuid.uuid4()), "status": "new", "created_at": now_utc()})
     await db.inquiries.insert_one(doc)
     doc.pop("_id", None)
     return doc
+
+
+@api.get("/site/config")
+async def site_config():
+    return {
+        "brand": "SM Paint Industries",
+        "tagline": "Confidence of Quality & Durability | Since 1982",
+        "headline": "Industrial Coatings. Engineered to Endure.",
+        "whatsapp_number": os.environ.get("WHATSAPP_NUMBER", ""),
+        "logo_url": "https://customer-assets.emergentagent.com/job_color-explorer-6/artifacts/iu3nu4xy_sm%20paints%20final%20logo%20more.png",
+        "lines": [
+            {
+                "key": "vespa",
+                "name": "Vespa",
+                "tagline": "Reliable. Workhorse coatings.",
+                "description": "Vespa delivers reliable, workhorse coatings for everyday industrial and decorative needs — trusted on construction sites, factories, and homes across India.",
+            },
+            {
+                "key": "galleria",
+                "name": "Galleria",
+                "tagline": "Premium. Engineered for refinement.",
+                "description": "Galleria is our premium line — engineered for superior coverage, enhanced performance, and a refined finish. Built with high-grade pigments and binders for specification-grade projects.",
+            },
+        ],
+    }
 
 
 # -------------------- Admin Routes --------------------
 admin = APIRouter(prefix="/admin", dependencies=[Depends(require_admin)])
 
 
-# Products
 @admin.post("/products", response_model=ProductOut)
 async def admin_create_product(body: ProductIn):
     doc = body.model_dump()
@@ -246,8 +280,7 @@ async def admin_create_product(body: ProductIn):
 
 @admin.patch("/products/{pid}", response_model=ProductOut)
 async def admin_update_product(pid: str, body: ProductIn):
-    update = body.model_dump()
-    res = await db.products.update_one({"id": pid}, {"$set": update})
+    res = await db.products.update_one({"id": pid}, {"$set": body.model_dump()})
     if res.matched_count == 0:
         raise HTTPException(404, "Product not found")
     doc = await db.products.find_one({"id": pid}, {"_id": 0})
@@ -262,7 +295,6 @@ async def admin_delete_product(pid: str):
     return {"ok": True}
 
 
-# Colors
 @admin.post("/colors", response_model=ColorOut)
 async def admin_create_color(body: ColorIn):
     doc = body.model_dump()
@@ -289,7 +321,6 @@ async def admin_delete_color(cid: str):
     return {"ok": True}
 
 
-# Gallery
 @admin.post("/gallery", response_model=GalleryOut)
 async def admin_create_gallery(body: GalleryIn):
     doc = body.model_dump()
@@ -316,7 +347,6 @@ async def admin_delete_gallery(gid: str):
     return {"ok": True}
 
 
-# Inquiries
 @admin.get("/inquiries", response_model=List[InquiryOut])
 async def admin_list_inquiries():
     docs = await db.inquiries.find({}, {"_id": 0}).sort("created_at", -1).to_list(1000)
@@ -343,15 +373,6 @@ async def admin_delete_inquiry(iid: str):
     return {"ok": True}
 
 
-# Site config
-@api.get("/site/config")
-async def site_config():
-    return {
-        "brand": "Chroma Paints",
-        "whatsapp_number": os.environ.get("WHATSAPP_NUMBER", ""),
-    }
-
-
 api.include_router(admin)
 app.include_router(api)
 
@@ -365,177 +386,398 @@ app.add_middleware(
 )
 
 
-# -------------------- Seed --------------------
-SEED_COLORS = [
-    # Neutrals
-    {"name": "Alabaster", "hex": "#EDE6D6", "family": "Neutrals", "code": "CP-N01"},
-    {"name": "Bone White", "hex": "#F4EFE6", "family": "Neutrals", "code": "CP-N02"},
-    {"name": "Stone Mist", "hex": "#C9C2B6", "family": "Neutrals", "code": "CP-N03"},
-    {"name": "Charcoal", "hex": "#3A3A3A", "family": "Neutrals", "code": "CP-N04"},
-    # Earth
-    {"name": "Terracotta", "hex": "#B65A4B", "family": "Earth", "code": "CP-E01"},
-    {"name": "Burnt Sienna", "hex": "#8C3B2A", "family": "Earth", "code": "CP-E02"},
-    {"name": "Clay", "hex": "#C58A6A", "family": "Earth", "code": "CP-E03"},
-    {"name": "Saffron", "hex": "#E4A24A", "family": "Earth", "code": "CP-E04"},
-    # Greens
-    {"name": "Sage", "hex": "#8C9986", "family": "Greens", "code": "CP-G01"},
-    {"name": "Forest", "hex": "#3C5A4A", "family": "Greens", "code": "CP-G02"},
-    {"name": "Olive Grove", "hex": "#7B7E4C", "family": "Greens", "code": "CP-G03"},
-    {"name": "Eucalyptus", "hex": "#A8C0AC", "family": "Greens", "code": "CP-G04"},
-    # Blues
-    {"name": "Indigo Dusk", "hex": "#2E3A59", "family": "Blues", "code": "CP-B01"},
-    {"name": "Slate", "hex": "#5C7184", "family": "Blues", "code": "CP-B02"},
-    {"name": "Sky Linen", "hex": "#BCCCDB", "family": "Blues", "code": "CP-B03"},
-    {"name": "Midnight", "hex": "#1A2238", "family": "Blues", "code": "CP-B04"},
-    # Warm
-    {"name": "Peach Veil", "hex": "#F4C7B0", "family": "Warm", "code": "CP-W01"},
-    {"name": "Coral Bloom", "hex": "#E97C6E", "family": "Warm", "code": "CP-W02"},
-    {"name": "Marigold", "hex": "#E6A33A", "family": "Warm", "code": "CP-W03"},
-    {"name": "Rose Quartz", "hex": "#D9A6A3", "family": "Warm", "code": "CP-W04"},
+# -------------------- Seed Data --------------------
+SEED_PRODUCTS = [
+    # ===== VESPA LINE =====
+    {
+        "name": "Vespa Super Synthetic Enamel",
+        "line": "vespa",
+        "category": "enamel",
+        "finish": "gloss",
+        "short_description": "High-gloss multi-purpose synthetic resin enamel for wood, metal & plaster.",
+        "description": "A high-gloss, fast-drying multi-purpose enamel based on synthetic resin. Provides excellent coverage and a long-lasting finish on wood, metal, and other surfaces for interiors and exteriors. Ready-to-brush, thin with MTO as needed.",
+        "features": ["High-gloss synthetic resin base", "Multi-surface: wood, metal, plaster", "Interior & exterior use", "Excellent flow and levelling", "Wide colour range"],
+        "coverage": "12-15 m²/lt/coat",
+        "coverage_detail": "12-15 m²/lt/coat at 20-25 μ DFT  |  6-10 m²/lt/coat at 35-40 μ DFT",
+        "drying_time": "Surface dry: 30 min",
+        "recoat_time": "6 to 8 hrs",
+        "application": "Brush, Spray, Roller",
+        "pack_sizes": ["500 ml", "1 lt", "4 lt", "20 lt"],
+        "thinner": "M.T.O (Mineral Turpentine Oil)",
+        "recommended_primer": "Metal: Red Oxide Primer  |  Wood: White or Pink Primer",
+        "available_shades": "As per shade card",
+        "image_url": "https://images.pexels.com/photos/1887946/pexels-photo-1887946.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+        "featured": True,
+        "sort_order": 1,
+    },
+    {
+        "name": "Vespa Primer Surfacer",
+        "line": "vespa",
+        "category": "primer",
+        "finish": "matte",
+        "short_description": "Corrosion-resistant undercoat & filler for metal and wood.",
+        "description": "Vespa Primer Surfacer is a corrosion-resistant undercoat and filler for ferrous & non-ferrous metals and wood. Available in White (wood) and Red Oxide (metal). Covers minor surface imperfections while providing a robust adhesion base.",
+        "features": ["Excellent corrosion resistance", "Dual-purpose: undercoat + filler", "Good adhesion on bare metal & wood", "Suitable for corrosive environments"],
+        "coverage": "8-10 m²/lt for 2 coats",
+        "coverage_detail": "8-10 m²/lt / 2 coats at 25-30 μ DFT",
+        "drying_time": "Recoat: 1 to 1.5 hrs",
+        "recoat_time": "Hard dry: 18 hrs",
+        "application": "Brush, Spray @ 40-50 psi",
+        "pack_sizes": ["500 ml", "1 lt", "4 lt", "20 lt"],
+        "thinner": "M.T.O (Mineral Turpentine Oil)",
+        "recommended_primer": "—",
+        "available_shades": "White, Pink, Red Oxide",
+        "image_url": "https://images.pexels.com/photos/6563575/pexels-photo-6563575.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+        "featured": False,
+        "sort_order": 2,
+    },
+    {
+        "name": "Vespa Aluminium Paint",
+        "line": "vespa",
+        "category": "industrial",
+        "finish": "lustrous",
+        "short_description": "Brilliant metallic lustre with corrosion & heat reflective protection.",
+        "description": "A two-pack aluminium paint (paste + medium) offering brilliant lustre, excellent durability, and outstanding corrosion resistance. High reflectivity reduces internal temperatures — ideal for steel structures, wagons, oil tanks, and non-ferrous metals.",
+        "features": ["Brilliant metallic lustre", "Excellent corrosion resistance", "High heat reflectivity", "Dual-pack system", "Fast drying", "Steel structures & tanks"],
+        "coverage": "13-14 m²/lt/coat",
+        "coverage_detail": "13-14 m²/lt/coat at 25-30 μ DFT",
+        "drying_time": "Recoat: 2 hrs",
+        "recoat_time": "Hard dry: 18 hrs",
+        "application": "Brush, Spray @ 40-50 psi",
+        "pack_sizes": ["500 ml", "1 lt", "4 lt", "20 lt"],
+        "thinner": "M.T.O (Mineral Turpentine Oil)",
+        "recommended_primer": "Red Oxide Primer",
+        "available_shades": "Aluminium",
+        "image_url": "https://images.unsplash.com/photo-1543857778-c4a1a3e0b2eb?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxOTJ8MHwxfHNlYXJjaHwxfHxwYWludCUyMGJydXNoJTIwdGV4dHVyZSUyMHN3YXRjaCUyMGNvbG9yZnVsfGVufDB8fHx8MTc4MjM3NDY1MHww&ixlib=rb-4.1.0&q=85",
+        "featured": False,
+        "sort_order": 3,
+    },
+    {
+        "name": "Vespa Oil Bound Distemper",
+        "line": "vespa",
+        "category": "distemper",
+        "finish": "matte",
+        "short_description": "Acrylic-based washable interior distemper in luxurious pastels.",
+        "description": "An acrylic-based, washable oil-bound distemper for plastered, concrete, and asbestos interior surfaces. Smooth matt finish, scrub-resistant after curing, available in luxurious pastel shades.",
+        "features": ["Washable (after 7 days)", "Scrub-resistant after curing", "Luxurious pastel shade range", "Low odour", "Easy to maintain"],
+        "coverage": "12-15 m²/kg/coat",
+        "coverage_detail": "12-15 m²/kg/coat",
+        "drying_time": "Surface dry: 30 min",
+        "recoat_time": "Recoat: 4 hrs",
+        "application": "Brush, Spray, Roller",
+        "pack_sizes": ["500 ml", "1 lt", "4 lt", "20 lt"],
+        "thinner": "Water (400 ml per 1 kg)",
+        "recommended_primer": "Solvent-based (new walls)  |  Water-based (old walls)",
+        "available_shades": "Luxurious pastel range — see shade card",
+        "image_url": "https://images.unsplash.com/photo-1759774313632-854207c22ec1?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA3MDB8MHwxfHNlYXJjaHwxfHxsdXh1cmlvdXMlMjBsaXZpbmclMjByb29tJTIwcGFpbnRlZCUyMHdhbGwlMjBpbnRlcmlvciUyMGRlc2lnbnxlbnwwfHx8fDE3ODIzNzQ2NTB8MA&ixlib=rb-4.1.0&q=85",
+        "featured": False,
+        "sort_order": 4,
+    },
+    # ===== GALLERIA LINE =====
+    {
+        "name": "Galleria Premium Enamel",
+        "line": "galleria",
+        "category": "enamel",
+        "finish": "gloss",
+        "short_description": "Mirror-like premium enamel with high opacity and outstanding durability.",
+        "description": "A superior quality quick-drying glossy paint based on high-grade alkyd resin for indoors and outdoors, on wood and metal. Engineered with high-opacity, fade-resistant pigments delivering mirror-like gloss and outstanding durability — a hardwearing protective coating of exceptional merit.",
+        "features": ["Mirror-like gloss finish", "Water resistant", "Excellent brushability", "Outstanding flow & levelling", "Withstands sunlight, dust & weather", "Maximum gloss retention", "Resistant to mild corrosive chemicals", "Wide stylish colour range"],
+        "coverage": "15-22 m²/lt/coat",
+        "coverage_detail": "15-22 m²/lt/coat at 20-25 μ DFT  |  10-12 m²/lt/coat at 35-40 μ DFT",
+        "drying_time": "Surface dry: 30 min",
+        "recoat_time": "White: 8 hrs  |  Shades: 6 hrs",
+        "application": "Brush, Spray, Roller",
+        "pack_sizes": ["500 ml", "1 lt", "4 lt", "20 lt"],
+        "thinner": "M.T.O (Mineral Turpentine Oil)",
+        "recommended_primer": "Metal: Red Oxide Primer  |  Wood: White or Pink Primer",
+        "available_shades": "As per shade card",
+        "image_url": "https://images.unsplash.com/photo-1759774313632-854207c22ec1?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA3MDB8MHwxfHNlYXJjaHwxfHxsdXh1cmlvdXMlMjBsaXZpbmclMjByb29tJTIwcGFpbnRlZCUyMHdhbGwlMjBpbnRlcmlvciUyMGRlc2lnbnxlbnwwfHx8fDE3ODIzNzQ2NTB8MA&ixlib=rb-4.1.0&q=85",
+        "featured": True,
+        "sort_order": 5,
+    },
+    {
+        "name": "Galleria Premium Primer Surfacer",
+        "line": "galleria",
+        "category": "primer",
+        "finish": "matte",
+        "short_description": "Double coverage premium primer with superior binder system.",
+        "description": "Galleria Premium Primer Surfacer delivers everything Vespa's primer offers — corrosion resistance, excellent adhesion, surface filling — with double the coverage. Formulated with high-grade binders for superior holdout and inter-coat adhesion. Ideal for premium specification jobs.",
+        "features": ["Double coverage: 16-20 m²/lt", "Superior binder system", "Excellent holdout and adhesion", "Corrosion-resistant formula", "Ideal for premium specification jobs"],
+        "coverage": "16-20 m²/lt for 2 coats",
+        "coverage_detail": "16-20 m²/lt / 2 coats at 25-30 μ DFT",
+        "drying_time": "Recoat: 1 to 1.5 hrs",
+        "recoat_time": "Hard dry: 18 hrs",
+        "application": "Brush, Spray @ 40-50 psi",
+        "pack_sizes": ["500 ml", "1 lt", "4 lt", "20 lt"],
+        "thinner": "M.T.O (Mineral Turpentine Oil)",
+        "recommended_primer": "—",
+        "available_shades": "White, Pink, Red Oxide",
+        "image_url": "https://images.pexels.com/photos/6563575/pexels-photo-6563575.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+        "featured": False,
+        "sort_order": 6,
+    },
+    {
+        "name": "Galleria Clear Varnish",
+        "line": "galleria",
+        "category": "varnish",
+        "finish": "transparent",
+        "short_description": "Crystal-clear premium varnish enhancing natural wood grain.",
+        "description": "Premium crystal-clear, high-gloss varnish based on high-quality alkyd resin. Provides a durable, transparent protective film that enhances the natural grain of wood and adds lustre to metal and decorative surfaces. Excellent water resistance and UV stability for interior and exterior use.",
+        "features": ["Crystal clear high-gloss film", "Enhances natural wood grain", "Excellent water resistance", "UV stable for exterior use", "Brush, spray or wipe-on application", "Interior & exterior use"],
+        "coverage": "14-16 m²/lt/coat",
+        "coverage_detail": "14-16 m²/lt/coat at 20-25 μ DFT",
+        "drying_time": "Surface dry: 30 min",
+        "recoat_time": "6 to 8 hrs",
+        "application": "Brush, Spray, Wipe-on (2-3 coats for optimum gloss)",
+        "pack_sizes": ["500 ml", "1 lt", "4 lt", "20 lt"],
+        "thinner": "M.T.O (Mineral Turpentine Oil)",
+        "recommended_primer": "—",
+        "available_shades": "Clear / Transparent",
+        "image_url": "https://images.pexels.com/photos/19899076/pexels-photo-19899076.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+        "featured": False,
+        "sort_order": 7,
+    },
+    {
+        "name": "Galleria Hammertone Paint",
+        "line": "galleria",
+        "category": "specialty",
+        "finish": "textured",
+        "short_description": "Decorative hammered-texture finish for metal surfaces.",
+        "description": "A distinctive decorative finish paint that creates a beautiful textured hammered effect on metal surfaces. Hides surface imperfections, resists corrosion, and provides a hard-wearing attractive coat. Ideal for fabrications, machinery, garden furniture, railings, gates, and industrial equipment.",
+        "features": ["Unique decorative hammer texture", "Hides surface imperfections", "Corrosion resistant", "Hard-wearing durable film", "Available in multiple metallic shades", "Spray for best texture result"],
+        "coverage": "8-10 m²/lt/coat",
+        "coverage_detail": "8-10 m²/lt/coat at 25-30 μ DFT",
+        "drying_time": "Surface dry: 30 min",
+        "recoat_time": "6 to 8 hrs",
+        "application": "Spray (preferred for texture). Do not thin > 5-10%.",
+        "pack_sizes": ["500 ml", "1 lt", "4 lt"],
+        "thinner": "M.T.O (Mineral Turpentine Oil) — max 5-10%",
+        "recommended_primer": "Red Oxide Primer or self-priming on well-prepared surfaces",
+        "available_shades": "Silver, Black, Red, Blue, Green, Golden Bronze",
+        "image_url": "https://images.unsplash.com/photo-1543857778-c4a1a3e0b2eb?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxOTJ8MHwxfHNlYXJjaHwxfHxwYWludCUyMGJydXNoJTIwdGV4dHVyZSUyMHN3YXRjaCUyMGNvbG9yZnVsfGVufDB8fHx8MTc4MjM3NDY1MHww&ixlib=rb-4.1.0&q=85",
+        "featured": True,
+        "sort_order": 8,
+    },
+    {
+        "name": "Galleria Aluminium Paint",
+        "line": "galleria",
+        "category": "industrial",
+        "finish": "lustrous",
+        "short_description": "Premium metallic aluminium with superior finish & adhesion.",
+        "description": "Brilliant lustre, excellent durability, and outstanding corrosion resistance. High reflectivity reduces internal temperatures — formulated under the Galleria premium standard for superior finish and adhesion. Two-pack system (paste + medium), fast drying with excellent hardness, flexibility, and water resistance.",
+        "features": ["Premium metallic lustre", "Superior corrosion resistance", "High heat reflectivity", "Dual-pack system", "Fast drying premium formula", "Galleria exclusive product"],
+        "coverage": "13-14 m²/lt/coat",
+        "coverage_detail": "13-14 m²/lt/coat at 25-30 μ DFT",
+        "drying_time": "Recoat: 2 hrs",
+        "recoat_time": "Hard dry: 18 hrs",
+        "application": "Brush, Spray @ 40-50 psi",
+        "pack_sizes": ["500 ml", "1 lt", "4 lt", "20 lt"],
+        "thinner": "M.T.O (Mineral Turpentine Oil)",
+        "recommended_primer": "Red Oxide Primer",
+        "available_shades": "Aluminium",
+        "image_url": "https://images.unsplash.com/photo-1560184897-ae75f418493e?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzd8MHwxfHNlYXJjaHwxfHxob3VzZSUyMGV4dGVyaW9yJTIwcGFpbnRpbmclMjBiZWF1dGlmdWwlMjBob21lfGVufDB8fHx8MTc4MjM3NDY1MXww&ixlib=rb-4.1.0&q=85",
+        "featured": False,
+        "sort_order": 9,
+    },
 ]
 
 
-SEED_PRODUCTS = [
-    {
-        "name": "Velvet Touch Interior Emulsion",
-        "category": "interior",
-        "finish": "matte",
-        "coverage": "140-160 sq.ft per litre",
-        "pack_sizes": ["1L", "4L", "10L", "20L"],
-        "price": 540.0,
-        "description": "A luxurious low-sheen interior emulsion with smooth coverage, low VOC, and superior washability. Ideal for living rooms, bedrooms, and feature walls.",
-        "image_url": "https://images.pexels.com/photos/1887946/pexels-photo-1887946.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
-        "featured": True,
-    },
-    {
-        "name": "Stone Shield Exterior Emulsion",
-        "category": "exterior",
-        "finish": "satin",
-        "coverage": "120-140 sq.ft per litre",
-        "pack_sizes": ["4L", "10L", "20L"],
-        "price": 720.0,
-        "description": "Weatherproof exterior emulsion engineered for monsoon-grade protection. UV resistant, anti-algal, and crack-bridging for long lasting facades.",
-        "image_url": "https://images.unsplash.com/photo-1560184897-ae75f418493e?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzd8MHwxfHNlYXJjaHwxfHxob3VzZSUyMGV4dGVyaW9yJTIwcGFpbnRpbmclMjBiZWF1dGlmdWwlMjBob21lfGVufDB8fHx8MTc4MjM3NDY1MXww&ixlib=rb-4.1.0&q=85",
-        "featured": True,
-    },
-    {
-        "name": "Atelier Premium Enamel",
-        "category": "enamel",
-        "finish": "gloss",
-        "coverage": "160 sq.ft per litre",
-        "pack_sizes": ["500ml", "1L", "4L"],
-        "price": 480.0,
-        "description": "High-gloss solvent-based enamel for woodwork, metal, and trims. Self-leveling formula for a mirror finish.",
-        "image_url": "https://images.unsplash.com/photo-1543857778-c4a1a3e0b2eb?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxOTJ8MHwxfHNlYXJjaHwxfHxwYWludCUyMGJydXNoJTIwdGV4dHVyZSUyMHN3YXRjaCUyMGNvbG9yZnVsfGVufDB8fHx8MTc4MjM3NDY1MHww&ixlib=rb-4.1.0&q=85",
-        "featured": False,
-    },
-    {
-        "name": "FirstCoat Wall Primer",
-        "category": "primer",
-        "finish": "matte",
-        "coverage": "180 sq.ft per litre",
-        "pack_sizes": ["4L", "10L", "20L"],
-        "price": 320.0,
-        "description": "Water-based universal primer for interior and exterior surfaces. Improves topcoat adhesion and uniform finish.",
-        "image_url": "https://images.pexels.com/photos/6563575/pexels-photo-6563575.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
-        "featured": False,
-    },
-    {
-        "name": "Heritage Distemper",
-        "category": "distemper",
-        "finish": "matte",
-        "coverage": "100 sq.ft per litre",
-        "pack_sizes": ["1kg", "5kg", "20kg"],
-        "price": 180.0,
-        "description": "Cost-effective dry distemper for interior walls. Easy to apply, low odour, available in classic pastel shades.",
-        "image_url": "https://images.unsplash.com/photo-1759774313632-854207c22ec1?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA3MDB8MHwxfHNlYXJjaHwxfHxsdXh1cmlvdXMlMjBsaXZpbmclMjByb29tJTIwcGFpbnRlZCUyMHdhbGwlMjBpbnRlcmlvciUyMGRlc2lnbnxlbnwwfHx8fDE3ODIzNzQ2NTB8MA&ixlib=rb-4.1.0&q=85",
-        "featured": False,
-    },
+# Full shade card extracted from "SM PAINT SHADE CARD FINAL.pdf"
+SEED_COLORS = [
+    # Whites, Beiges, Browns & Greys
+    {"name": "White Silk", "code": "L171", "hex": "#F7F5F0", "family": "whites", "collection": "Whites, Beiges, Browns & Greys"},
+    {"name": "Chloe Diamond", "code": "8785", "hex": "#F5F0F0", "family": "whites", "collection": "Whites, Beiges, Browns & Greys"},
+    {"name": "Sonnet", "code": "L146", "hex": "#F9F2EA", "family": "whites", "collection": "Whites, Beiges, Browns & Greys"},
+    {"name": "Morning Glory", "code": "0765", "hex": "#FDF3E7", "family": "whites", "collection": "Whites, Beiges, Browns & Greys"},
+    {"name": "Icy Peak", "code": "L109", "hex": "#FDF8F3", "family": "whites", "collection": "Whites, Beiges, Browns & Greys"},
+    {"name": "Bonewhite", "code": "0964", "hex": "#F5EFE9", "family": "whites", "collection": "Whites, Beiges, Browns & Greys"},
+    {"name": "French Cream", "code": "25YY 83/103", "hex": "#F9EBD7", "family": "beiges", "collection": "Whites, Beiges, Browns & Greys"},
+    {"name": "Pebble White", "code": "L136", "hex": "#F4E4CB", "family": "beiges", "collection": "Whites, Beiges, Browns & Greys"},
+    {"name": "Sugared Nut", "code": "L126", "hex": "#F0DBB9", "family": "beiges", "collection": "Whites, Beiges, Browns & Greys"},
+    {"name": "Enlighten-N", "code": "4148", "hex": "#F2E9DE", "family": "beiges", "collection": "Whites, Beiges, Browns & Greys"},
+    {"name": "Tusk Tusk", "code": "30YY 79/070", "hex": "#F2E8DC", "family": "beiges", "collection": "Whites, Beiges, Browns & Greys"},
+    {"name": "Confetti", "code": "8300", "hex": "#F2E9E2", "family": "beiges", "collection": "Whites, Beiges, Browns & Greys"},
+    {"name": "Winter Morn", "code": "7228", "hex": "#E0E9F2", "family": "pastels", "collection": "Whites, Beiges, Browns & Greys"},
+    {"name": "Ski Adventure", "code": "02BB 81/030", "hex": "#E5EFF5", "family": "pastels", "collection": "Whites, Beiges, Browns & Greys"},
+    {"name": "Romance", "code": "10BB 83/020", "hex": "#E5EBEF", "family": "pastels", "collection": "Whites, Beiges, Browns & Greys"},
+    {"name": "Magnolia", "code": "0387", "hex": "#FBDDC4", "family": "beiges", "collection": "Whites, Beiges, Browns & Greys"},
+    {"name": "Dawn Dew-N", "code": "L190", "hex": "#F6E8D6", "family": "beiges", "collection": "Whites, Beiges, Browns & Greys"},
+    {"name": "Meadow Lark", "code": "8499", "hex": "#F1E2CD", "family": "beiges", "collection": "Whites, Beiges, Browns & Greys"},
+    {"name": "Cashmere-N", "code": "2119", "hex": "#F5E9E0", "family": "beiges", "collection": "Whites, Beiges, Browns & Greys"},
+    {"name": "Water Chestnut", "code": "30YY 62/127", "hex": "#E6DBCB", "family": "beiges", "collection": "Whites, Beiges, Browns & Greys"},
+    {"name": "Barley Beige", "code": "30YY 68/024", "hex": "#EBDBC3", "family": "beiges", "collection": "Whites, Beiges, Browns & Greys"},
+    {"name": "Cane Beige", "code": "9563", "hex": "#F0E1D4", "family": "beiges", "collection": "Whites, Beiges, Browns & Greys"},
+    {"name": "Baked Biscuit", "code": "8579", "hex": "#F0E2D1", "family": "beiges", "collection": "Whites, Beiges, Browns & Greys"},
+    {"name": "Light Biscuit-N", "code": "0318", "hex": "#F0E2CD", "family": "beiges", "collection": "Whites, Beiges, Browns & Greys"},
+    {"name": "Sound of Music", "code": "8756", "hex": "#DCD3CB", "family": "greys", "collection": "Whites, Beiges, Browns & Greys"},
+    {"name": "Apricot-N", "code": "0501", "hex": "#F8DEBC", "family": "beiges", "collection": "Whites, Beiges, Browns & Greys"},
+    {"name": "Tahoe's Stone", "code": "00YY 62/144", "hex": "#D1D1BE", "family": "greys", "collection": "Whites, Beiges, Browns & Greys"},
+    {"name": "Grey Flannel", "code": "8331", "hex": "#D3CBC4", "family": "greys", "collection": "Whites, Beiges, Browns & Greys"},
+    {"name": "Virtual Reality", "code": "30BB 72/040", "hex": "#B5C8D6", "family": "blues", "collection": "Whites, Beiges, Browns & Greys"},
+    {"name": "Aluminium", "code": "8337", "hex": "#C2C6C9", "family": "greys", "collection": "Whites, Beiges, Browns & Greys"},
+    {"name": "Smoke-N", "code": "0616", "hex": "#B4B7B9", "family": "greys", "collection": "Whites, Beiges, Browns & Greys"},
+    {"name": "Brandy", "code": "4115", "hex": "#9E8C7D", "family": "browns", "collection": "Whites, Beiges, Browns & Greys"},
+    {"name": "Brownstone", "code": "4234", "hex": "#7D7065", "family": "browns", "collection": "Whites, Beiges, Browns & Greys"},
+    {"name": "Old Brick", "code": "8613", "hex": "#9C6256", "family": "browns", "collection": "Whites, Beiges, Browns & Greys"},
+    # Yellows, Peaches, Oranges, Reds & Pinks
+    {"name": "Candle Light", "code": "7900", "hex": "#F5F0D6", "family": "yellows", "collection": "Yellows, Peaches, Oranges, Reds & Pinks"},
+    {"name": "Blush", "code": "80YR 75/057", "hex": "#FBE6E2", "family": "pinks", "collection": "Yellows, Peaches, Oranges, Reds & Pinks"},
+    {"name": "Mid Cream", "code": "0358", "hex": "#F3DFA6", "family": "yellows", "collection": "Yellows, Peaches, Oranges, Reds & Pinks"},
+    {"name": "Solemn Yellow", "code": "7882", "hex": "#FBDCA3", "family": "yellows", "collection": "Yellows, Peaches, Oranges, Reds & Pinks"},
+    {"name": "Marigold", "code": "7986", "hex": "#FAC48F", "family": "peaches", "collection": "Yellows, Peaches, Oranges, Reds & Pinks"},
+    {"name": "Raffia", "code": "7929", "hex": "#FAD08C", "family": "yellows", "collection": "Yellows, Peaches, Oranges, Reds & Pinks"},
+    {"name": "Hearth", "code": "7930", "hex": "#FBD69F", "family": "peaches", "collection": "Yellows, Peaches, Oranges, Reds & Pinks"},
+    {"name": "Pineapple-N", "code": "0399", "hex": "#FBD695", "family": "yellows", "collection": "Yellows, Peaches, Oranges, Reds & Pinks"},
+    {"name": "Warm Peach", "code": "10YY 77/125", "hex": "#FBD3AF", "family": "peaches", "collection": "Yellows, Peaches, Oranges, Reds & Pinks"},
+    {"name": "Funny Feeling", "code": "50YR 78/064", "hex": "#F8D4D6", "family": "pinks", "collection": "Yellows, Peaches, Oranges, Reds & Pinks"},
+    {"name": "Coral Rocks", "code": "8097", "hex": "#FCD5B5", "family": "peaches", "collection": "Yellows, Peaches, Oranges, Reds & Pinks"},
+    {"name": "Essence", "code": "8099", "hex": "#FAD0D0", "family": "pinks", "collection": "Yellows, Peaches, Oranges, Reds & Pinks"},
+    {"name": "Mango Duet", "code": "7977", "hex": "#FBC998", "family": "peaches", "collection": "Yellows, Peaches, Oranges, Reds & Pinks"},
+    {"name": "Pink BB", "code": "8034", "hex": "#FCD0C8", "family": "pinks", "collection": "Yellows, Peaches, Oranges, Reds & Pinks"},
+    {"name": "Sunshine Peach-N", "code": "9934", "hex": "#FAC3A5", "family": "peaches", "collection": "Yellows, Peaches, Oranges, Reds & Pinks"},
+    {"name": "Romantic Pink", "code": "50RR 75/068", "hex": "#F1D7E3", "family": "pinks", "collection": "Yellows, Peaches, Oranges, Reds & Pinks"},
+    {"name": "Hacienda Clay", "code": "7936", "hex": "#F9B77F", "family": "peaches", "collection": "Yellows, Peaches, Oranges, Reds & Pinks"},
+    {"name": "Nursery Pink", "code": "8058", "hex": "#FCD4D4", "family": "pinks", "collection": "Yellows, Peaches, Oranges, Reds & Pinks"},
+    {"name": "Morning Dream", "code": "7904", "hex": "#F9E47A", "family": "yellows", "collection": "Yellows, Peaches, Oranges, Reds & Pinks"},
+    {"name": "Polka", "code": "7869", "hex": "#F7BD0F", "family": "yellows", "collection": "Yellows, Peaches, Oranges, Reds & Pinks"},
+    {"name": "Mango Shake", "code": "7960", "hex": "#F5A11F", "family": "yellows", "collection": "Yellows, Peaches, Oranges, Reds & Pinks"},
+    {"name": "Orange Crush", "code": "7959", "hex": "#F58E1A", "family": "oranges", "collection": "Yellows, Peaches, Oranges, Reds & Pinks"},
+    {"name": "Sunrise", "code": "526", "hex": "#FF7F00", "family": "oranges", "collection": "Yellows, Peaches, Oranges, Reds & Pinks"},
+    {"name": "Signal Red", "code": "—", "hex": "#F31E21", "family": "reds", "collection": "Yellows, Peaches, Oranges, Reds & Pinks"},
+    {"name": "PO Red", "code": "—", "hex": "#DC1A1D", "family": "reds", "collection": "Yellows, Peaches, Oranges, Reds & Pinks"},
+    {"name": "Terracotta-N", "code": "0427", "hex": "#C44933", "family": "reds", "collection": "Yellows, Peaches, Oranges, Reds & Pinks"},
+    # Blues, Greens & Violets
+    {"name": "Delicate Violet", "code": "7164", "hex": "#EAE5E9", "family": "pastels", "collection": "Blues, Greens & Violets"},
+    {"name": "Innocence", "code": "7211", "hex": "#D8DEEE", "family": "pastels", "collection": "Blues, Greens & Violets"},
+    {"name": "Lavender Secret", "code": "7163", "hex": "#E1D6EA", "family": "pastels", "collection": "Blues, Greens & Violets"},
+    {"name": "Lilac Feather-N", "code": "9630", "hex": "#DCCEEA", "family": "pastels", "collection": "Blues, Greens & Violets"},
+    {"name": "Orchid Bloom", "code": "7168", "hex": "#C9C2DE", "family": "pastels", "collection": "Blues, Greens & Violets"},
+    {"name": "Snow Princess", "code": "7332", "hex": "#E1F1EF", "family": "pastels", "collection": "Blues, Greens & Violets"},
+    {"name": "Star Gaze", "code": "7364", "hex": "#D8EAF3", "family": "blues", "collection": "Blues, Greens & Violets"},
+    {"name": "Blueberry Mash", "code": "14BB 55/113", "hex": "#BDD1E0", "family": "blues", "collection": "Blues, Greens & Violets"},
+    {"name": "Summer Sky", "code": "7274", "hex": "#BCE3F5", "family": "blues", "collection": "Blues, Greens & Violets"},
+    {"name": "Alliance", "code": "1203", "hex": "#C1D1D8", "family": "blues", "collection": "Blues, Greens & Violets"},
+    {"name": "Pigeon Blue-N", "code": "0122", "hex": "#A4D5E5", "family": "blues", "collection": "Blues, Greens & Violets"},
+    {"name": "Blue Bay", "code": "7329", "hex": "#8FC9E9", "family": "blues", "collection": "Blues, Greens & Violets"},
+    {"name": "Electric Blue Plus", "code": "—", "hex": "#28B3E9", "family": "blues", "collection": "Blues, Greens & Violets"},
+    {"name": "Menthol", "code": "L116", "hex": "#E6F0E0", "family": "greens", "collection": "Blues, Greens & Violets"},
+    {"name": "Green Whisper", "code": "2425", "hex": "#D9EBD0", "family": "greens", "collection": "Blues, Greens & Violets"},
+    {"name": "Green Sleeves-N", "code": "2420", "hex": "#C9DDBF", "family": "greens", "collection": "Blues, Greens & Violets"},
+    {"name": "Tree Of Life", "code": "7691", "hex": "#D9E3C5", "family": "greens", "collection": "Blues, Greens & Violets"},
+    {"name": "Mint Crush", "code": "7547", "hex": "#CBEBD8", "family": "greens", "collection": "Blues, Greens & Violets"},
+    {"name": "Poplar Grove", "code": "7584", "hex": "#9AB9A4", "family": "greens", "collection": "Blues, Greens & Violets"},
+    {"name": "Mehendi-N", "code": "2361", "hex": "#5A6546", "family": "greens", "collection": "Blues, Greens & Violets"},
+    # Interior Combinations
+    {"name": "Ancient Pottery", "code": "—", "hex": "#9E8168", "family": "browns", "collection": "Interior Combinations"},
+    {"name": "Indian Painting", "code": "—", "hex": "#E3D5C5", "family": "beiges", "collection": "Interior Combinations"},
+    {"name": "Toasty Grey", "code": "—", "hex": "#B8A99B", "family": "greys", "collection": "Interior Combinations"},
+    {"name": "European White", "code": "—", "hex": "#F2EBE3", "family": "whites", "collection": "Interior Combinations"},
+    {"name": "Creamy Toffee", "code": "—", "hex": "#C9915D", "family": "browns", "collection": "Interior Combinations"},
+    {"name": "Creme Brulee", "code": "—", "hex": "#9D6A3B", "family": "browns", "collection": "Interior Combinations"},
+    {"name": "Shadowbox", "code": "—", "hex": "#A1968C", "family": "greys", "collection": "Interior Combinations"},
+    {"name": "Church Street", "code": "—", "hex": "#F3E1CA", "family": "beiges", "collection": "Interior Combinations"},
+    {"name": "Warm Gold", "code": "—", "hex": "#E3A63B", "family": "yellows", "collection": "Interior Combinations"},
+    {"name": "Rich Brocade", "code": "—", "hex": "#CC9536", "family": "yellows", "collection": "Interior Combinations"},
+    {"name": "Maple Fantasy", "code": "—", "hex": "#C48E59", "family": "browns", "collection": "Interior Combinations"},
+    {"name": "Dark Safari", "code": "—", "hex": "#765330", "family": "browns", "collection": "Interior Combinations"},
+    {"name": "Oriental Coral", "code": "—", "hex": "#E66359", "family": "reds", "collection": "Interior Combinations"},
+    {"name": "Matador", "code": "—", "hex": "#A63529", "family": "reds", "collection": "Interior Combinations"},
+    {"name": "Moroccan Sands", "code": "—", "hex": "#E87C29", "family": "oranges", "collection": "Interior Combinations"},
+    {"name": "Sunset Flame", "code": "—", "hex": "#CC6428", "family": "oranges", "collection": "Interior Combinations"},
+    {"name": "Mars Dust", "code": "—", "hex": "#D1865D", "family": "oranges", "collection": "Interior Combinations"},
+    {"name": "Spanish Chestnut", "code": "—", "hex": "#704128", "family": "browns", "collection": "Interior Combinations"},
+    {"name": "Royal Rose", "code": "—", "hex": "#A8244D", "family": "reds", "collection": "Interior Combinations"},
+    {"name": "Sophia", "code": "—", "hex": "#F0B6C0", "family": "pinks", "collection": "Interior Combinations"},
+    {"name": "Downing Street", "code": "—", "hex": "#A8412B", "family": "reds", "collection": "Interior Combinations"},
+    {"name": "Rich Blush", "code": "—", "hex": "#F2A796", "family": "pinks", "collection": "Interior Combinations"},
+    {"name": "Gorgeous Pink", "code": "—", "hex": "#CC2B5A", "family": "pinks", "collection": "Interior Combinations"},
+    {"name": "Destiny", "code": "—", "hex": "#F0B3BF", "family": "pinks", "collection": "Interior Combinations"},
+    {"name": "Swordplay", "code": "—", "hex": "#8B99AD", "family": "blues", "collection": "Interior Combinations"},
+    {"name": "Wisdom Light", "code": "—", "hex": "#33414D", "family": "blues", "collection": "Interior Combinations"},
+    {"name": "Pebble Drift", "code": "—", "hex": "#5A7280", "family": "blues", "collection": "Interior Combinations"},
+    {"name": "Denim Drift", "code": "—", "hex": "#9EB0BC", "family": "blues", "collection": "Interior Combinations"},
+    {"name": "Ceremonial Blue", "code": "—", "hex": "#8B9BB8", "family": "blues", "collection": "Interior Combinations"},
+    {"name": "Noble Blue", "code": "—", "hex": "#394A62", "family": "blues", "collection": "Interior Combinations"},
+    {"name": "Otters Dam", "code": "—", "hex": "#53593A", "family": "greens", "collection": "Interior Combinations"},
+    {"name": "English Apple", "code": "—", "hex": "#B8B530", "family": "yellows", "collection": "Interior Combinations"},
+    {"name": "Brazilian Forest", "code": "—", "hex": "#515C3E", "family": "greens", "collection": "Interior Combinations"},
+    {"name": "Highland Dash", "code": "—", "hex": "#C7C545", "family": "yellows", "collection": "Interior Combinations"},
+    {"name": "Forest Glen", "code": "—", "hex": "#83A9A3", "family": "greens", "collection": "Interior Combinations"},
+    {"name": "Serene Moments", "code": "—", "hex": "#4A6E6A", "family": "greens", "collection": "Interior Combinations"},
 ]
 
 
 SEED_GALLERY = [
     {
-        "title": "Sage Living Room",
+        "title": "Heritage Living Room",
         "image_url": "https://images.unsplash.com/photo-1759774313632-854207c22ec1?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA3MDB8MHwxfHNlYXJjaHwxfHxsdXh1cmlvdXMlMjBsaXZpbmclMjByb29tJTIwcGFpbnRlZCUyMHdhbGwlMjBpbnRlcmlvciUyMGRlc2lnbnxlbnwwfHx8fDE3ODIzNzQ2NTB8MA&ixlib=rb-4.1.0&q=85",
         "space": "Living Room",
-        "description": "Heritage interiors finished in Sage and Bone White, anchored by warm brass accents.",
+        "description": "Heritage room with warm gold and beige walls finished in Galleria Premium Enamel.",
     },
     {
-        "title": "Modern Grey Study",
+        "title": "Industrial Workshop",
         "image_url": "https://images.pexels.com/photos/19899076/pexels-photo-19899076.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
-        "space": "Study",
-        "description": "Soft slate walls with charcoal trims for a calm, contemporary workspace.",
+        "space": "Industrial",
+        "description": "Workshop interior coated with Vespa Super Synthetic Enamel for daily wear & tear.",
     },
     {
-        "title": "Coastal Porch",
+        "title": "Coastal Residence",
         "image_url": "https://images.unsplash.com/photo-1560184897-ae75f418493e?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzd8MHwxfHNlYXJjaHwxfHxob3VzZSUyMGV4dGVyaW9yJTIwcGFpbnRpbmclMjBiZWF1dGlmdWwlMjBob21lfGVufDB8fHx8MTc4MjM3NDY1MXww&ixlib=rb-4.1.0&q=85",
         "space": "Exterior",
-        "description": "Indigo dusk exterior paired with bone white trims for a timeless coastal facade.",
+        "description": "Coastal residence façade in deep noble blue Galleria Premium Enamel.",
     },
     {
-        "title": "Atelier Color Study",
+        "title": "Atelier Color Mixing",
         "image_url": "https://images.pexels.com/photos/6563575/pexels-photo-6563575.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
         "space": "Studio",
-        "description": "A curated palette exploration from our seasonal collection.",
+        "description": "Shade tinting in progress at our manufacturing unit — every batch hand-checked.",
+    },
+    {
+        "title": "Garden Furniture",
+        "image_url": "https://images.unsplash.com/photo-1543857778-c4a1a3e0b2eb?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxOTJ8MHwxfHNlYXJjaHwxfHxwYWludCUyMGJydXNoJTIwdGV4dHVyZSUyMHN3YXRjaCUyMGNvbG9yZnVsfGVufDB8fHx8MTc4MjM3NDY1MHww&ixlib=rb-4.1.0&q=85",
+        "space": "Outdoor",
+        "description": "Wrought-iron furniture finished in Galleria Hammertone — Golden Bronze.",
+    },
+    {
+        "title": "Pastel Bedroom",
+        "image_url": "https://images.pexels.com/photos/1887946/pexels-photo-1887946.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+        "space": "Bedroom",
+        "description": "Soft pastel bedroom with Vespa Oil Bound Distemper in Lavender Secret.",
     },
 ]
 
 
 @app.on_event("startup")
 async def startup():
-    # Indexes
     await db.users.create_index("email", unique=True)
     await db.products.create_index("id", unique=True)
     await db.colors.create_index("id", unique=True)
     await db.gallery.create_index("id", unique=True)
     await db.inquiries.create_index("id", unique=True)
 
-    # Admin seed (idempotent)
-    admin_email = os.environ.get("ADMIN_EMAIL", "admin@chromapaints.com").lower()
+    admin_email = os.environ.get("ADMIN_EMAIL", "admin@smpaints.com").lower()
     admin_password = os.environ.get("ADMIN_PASSWORD", "ChromaAdmin@2025")
     existing = await db.users.find_one({"email": admin_email})
     if not existing:
         await db.users.insert_one({
-            "id": str(uuid.uuid4()),
-            "email": admin_email,
-            "name": "Admin",
-            "role": "admin",
-            "password_hash": hash_password(admin_password),
-            "created_at": now_utc(),
+            "id": str(uuid.uuid4()), "email": admin_email, "name": "Admin", "role": "admin",
+            "password_hash": hash_password(admin_password), "created_at": now_utc(),
         })
-        logger.info("Admin user seeded: %s", admin_email)
+        logger.info("Admin seeded: %s", admin_email)
     elif not verify_password(admin_password, existing.get("password_hash", "")):
-        await db.users.update_one(
-            {"email": admin_email},
-            {"$set": {"password_hash": hash_password(admin_password)}}
-        )
-        logger.info("Admin password refreshed")
+        await db.users.update_one({"email": admin_email}, {"$set": {"password_hash": hash_password(admin_password)}})
 
-    # Seed colors / products / gallery if collections empty
     if await db.colors.count_documents({}) == 0:
-        await db.colors.insert_many([
-            {**c, "id": str(uuid.uuid4()), "created_at": now_utc()} for c in SEED_COLORS
-        ])
-        logger.info("Colors seeded")
+        await db.colors.insert_many([{**c, "id": str(uuid.uuid4()), "created_at": now_utc()} for c in SEED_COLORS])
+        logger.info("Colors seeded: %d", len(SEED_COLORS))
 
     if await db.products.count_documents({}) == 0:
-        # Pull some color ids for swatches
-        sample_colors = await db.colors.find({}, {"_id": 0, "id": 1}).to_list(20)
-        sample_ids = [c["id"] for c in sample_colors]
-        for i, p in enumerate(SEED_PRODUCTS):
-            p["id"] = str(uuid.uuid4())
-            p["created_at"] = now_utc()
-            # assign 4 swatches
-            p["swatch_color_ids"] = sample_ids[(i * 3) % max(1, len(sample_ids)):(i * 3) % max(1, len(sample_ids)) + 4]
-        await db.products.insert_many(SEED_PRODUCTS)
-        logger.info("Products seeded")
+        await db.products.insert_many([{**p, "id": str(uuid.uuid4()), "created_at": now_utc()} for p in SEED_PRODUCTS])
+        logger.info("Products seeded: %d", len(SEED_PRODUCTS))
 
     if await db.gallery.count_documents({}) == 0:
-        await db.gallery.insert_many([
-            {**g, "id": str(uuid.uuid4()), "created_at": now_utc(), "color_ids": []} for g in SEED_GALLERY
-        ])
-        logger.info("Gallery seeded")
+        await db.gallery.insert_many([{**g, "id": str(uuid.uuid4()), "created_at": now_utc(), "color_ids": []} for g in SEED_GALLERY])
+        logger.info("Gallery seeded: %d", len(SEED_GALLERY))
 
 
 @app.on_event("shutdown")

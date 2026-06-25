@@ -1,10 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { api } from "../lib/api";
 import { toast } from "sonner";
 import { Check } from "lucide-react";
 
 export default function Contact() {
-  const [form, setForm] = useState({ name: "", phone: "", email: "", city: "", product_interest: "", message: "" });
+  const [params] = useSearchParams();
+  const [form, setForm] = useState({ name: "", phone: "", email: "", city: "", product_interest: params.get("product") || "", message: "" });
+  useEffect(() => { const p = params.get("product"); if (p) setForm((f) => ({ ...f, product_interest: p })); }, [params]);
   const [sending, setSending] = useState(false);
   const [done, setDone] = useState(false);
 
