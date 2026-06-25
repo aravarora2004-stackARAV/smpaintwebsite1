@@ -3,11 +3,13 @@ import { Link, useLocation } from "react-router-dom";
 import { Menu, X, MessageCircle } from "lucide-react";
 import { api } from "../lib/api";
 
+const SHADE_CARD_PDF = "https://customer-assets.emergentagent.com/job_color-explorer-6/artifacts/rn4b1406_SM%20PAINT%20SHADE%20CARD%20FINAL.pdf";
+
 const links = [
   { to: "/", label: "Home" },
   { to: "/brands", label: "Brands" },
   { to: "/products", label: "Products" },
-  { to: "/colors", label: "Shade Card" },
+  { to: SHADE_CARD_PDF, label: "Shade Card", external: true },
   { to: "/gallery", label: "Gallery" },
   { to: "/contact", label: "Contact" },
 ];
@@ -78,7 +80,11 @@ export function PublicLayout({ children }) {
           <div className="lg:hidden border-t" style={{ borderColor: "var(--border)" }}>
             <div className="px-6 py-6 flex flex-col gap-5">
               {links.map((l) => (
-                <Link key={l.to} to={l.to} className="text-base font-semibold" data-testid={`nav-mobile-${l.label.toLowerCase().replace(/\s/g,'-')}`}>{l.label}</Link>
+                l.external ? (
+                  <a key={l.to} href={l.to} target="_blank" rel="noreferrer" className="text-base font-semibold" data-testid={`nav-mobile-${l.label.toLowerCase().replace(/\s/g,'-')}`}>{l.label}</a>
+                ) : (
+                  <Link key={l.to} to={l.to} className="text-base font-semibold" data-testid={`nav-mobile-${l.label.toLowerCase().replace(/\s/g,'-')}`}>{l.label}</Link>
+                )
               ))}
               <Link to="/contact" className="btn-solid mt-2 text-center">Request Quote</Link>
             </div>
@@ -108,7 +114,13 @@ export function PublicLayout({ children }) {
           <div className="md:col-span-3">
             <div className="overline text-white/50 mb-4">Explore</div>
             <div className="flex flex-col gap-2.5 text-sm">
-              {links.map((l) => (<Link key={l.to} to={l.to} className="hover:text-[color:var(--paint-yellow)] text-white/80">{l.label}</Link>))}
+              {links.map((l) => (
+                l.external ? (
+                  <a key={l.to} href={l.to} target="_blank" rel="noreferrer" className="hover:text-[color:var(--paint-yellow)] text-white/80">{l.label}</a>
+                ) : (
+                  <Link key={l.to} to={l.to} className="hover:text-[color:var(--paint-yellow)] text-white/80">{l.label}</Link>
+                )
+              ))}
             </div>
           </div>
           <div className="md:col-span-4">

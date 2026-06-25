@@ -77,7 +77,7 @@ export default function ProductDetail() {
 
             <div className="mt-10 flex flex-col sm:flex-row gap-3">
               <Link to={`/contact?product=${encodeURIComponent(product.name)}`} className="btn-solid flex-1" data-testid="product-detail-cta">Request quote <ArrowRight size={16} className="ml-2" /></Link>
-              <Link to="/colors" className="btn-line" data-testid="product-detail-shades">View shade card</Link>
+              <a href="https://customer-assets.emergentagent.com/job_color-explorer-6/artifacts/rn4b1406_SM%20PAINT%20SHADE%20CARD%20FINAL.pdf" target="_blank" rel="noreferrer" className="btn-line" data-testid="product-detail-shades">View shade card</a>
             </div>
           </div>
         </div>

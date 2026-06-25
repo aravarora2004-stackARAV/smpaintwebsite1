@@ -44,14 +44,14 @@ export default function Home() {
             </p>
             <div className="mt-9 flex items-center gap-4 flex-wrap">
               <Link to="/products" className="btn-solid" data-testid="hero-cta-products">View Catalogue <ArrowRight size={16} className="ml-2" /></Link>
-              <Link to="/colors" className="btn-line" data-testid="hero-cta-colors">Open Shade Card</Link>
+              <a href="https://customer-assets.emergentagent.com/job_color-explorer-6/artifacts/rn4b1406_SM%20PAINT%20SHADE%20CARD%20FINAL.pdf" target="_blank" rel="noreferrer" className="btn-line" data-testid="hero-cta-colors">Open Shade Card</a>
             </div>
 
             <div className="mt-12 grid grid-cols-2 sm:grid-cols-4 gap-6 max-w-2xl">
               <Stat n="40+" label="Years in business" />
               <Stat n="3" label="Brand portfolio" />
               <Stat n="116" label="Curated shades" />
-              <Stat n="20" label="Products" />
+              <Stat n="21" label="Products" />
             </div>
           </div>
 
@@ -121,7 +121,7 @@ export default function Home() {
                 Vespa delivers reliable, workhorse coatings for everyday industrial and decorative needs — trusted on construction sites, factories, and homes across India.
               </p>
               <div className="grid grid-cols-2 gap-y-3 text-sm border-t border-neutral-200 pt-5">
-                <div><div className="overline text-neutral-500 mb-1">Range</div><div>8 products</div></div>
+                <div><div className="overline text-neutral-500 mb-1">Range</div><div>10 products</div></div>
                 <div><div className="overline text-neutral-500 mb-1">Best for</div><div>Daily use</div></div>
                 <div><div className="overline text-neutral-500 mb-1">Coverage</div><div>12-15 m²/lt</div></div>
                 <div><div className="overline text-neutral-500 mb-1">Pricing</div><div>Workhorse value</div></div>
@@ -148,7 +148,7 @@ export default function Home() {
                 Galleria is our premium line — engineered for superior coverage, weatherproof exteriors, and a refined finish. High-grade pigments and binders for specification-grade projects.
               </p>
               <div className="grid grid-cols-2 gap-y-3 text-sm border-t border-white/20 pt-5">
-                <div><div className="overline text-white/50 mb-1">Range</div><div>5 products</div></div>
+                <div><div className="overline text-white/50 mb-1">Range</div><div>6 products</div></div>
                 <div><div className="overline text-white/50 mb-1">Best for</div><div>Specification</div></div>
                 <div><div className="overline text-white/50 mb-1">Coverage</div><div>15-22 m²/lt</div></div>
                 <div><div className="overline text-white/50 mb-1">Pigments</div><div>Fade-resistant</div></div>
