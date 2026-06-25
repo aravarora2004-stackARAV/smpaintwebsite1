@@ -23,7 +23,7 @@ export default function AdminLayout() {
         <div className="p-6 border-b border-slate-200">
           <Link to="/" className="flex items-center gap-2">
             <span className="block w-7 h-7" style={{ background: "linear-gradient(135deg,#B65A4B 0%,#8C9986 50%,#2E3A59 100%)" }} />
-            <span className="font-display text-lg">Chroma Admin</span>
+            <span className="font-display text-lg">SM Paint Admin</span>
           </Link>
         </div>
         <nav className="p-4 flex-1 space-y-1">

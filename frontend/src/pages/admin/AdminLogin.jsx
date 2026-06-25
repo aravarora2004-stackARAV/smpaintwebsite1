@@ -31,7 +31,7 @@ export default function AdminLogin() {
     <div className="min-h-screen flex items-center justify-center bg-slate-50" data-testid="admin-login-page">
       <div className="w-full max-w-md bg-white border border-slate-200 p-10">
         <div className="mb-8">
-          <div className="overline text-slate-500 mb-2">Chroma Paints</div>
+          <div className="overline text-slate-500 mb-2">SM Paint Industries</div>
           <div className="font-display text-3xl">Admin sign in</div>
         </div>
         <form onSubmit={submit} className="space-y-5">

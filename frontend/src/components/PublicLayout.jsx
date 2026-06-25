@@ -114,7 +114,7 @@ export function PublicLayout({ children }) {
           <div className="md:col-span-4">
             <div className="overline text-white/50 mb-4">Contact</div>
             <div className="text-sm text-white/80 space-y-1.5">
-              <div>hello@smpaints.com</div>
+              <div>hello@smpaints.in</div>
               <div>+91 9999 999 999</div>
               <div>Manufacturing unit · India</div>
               <div className="pt-4">
