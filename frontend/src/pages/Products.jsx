@@ -3,8 +3,8 @@ import { Link, useSearchParams } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import { api } from "../lib/api";
 
-const LINES = ["all", "vespa", "galleria"];
-const CATEGORIES = ["all", "enamel", "primer", "distemper", "varnish", "industrial", "specialty"];
+const LINES = ["all", "vespa", "galleria", "general"];
+const CATEGORIES = ["all", "emulsion", "enamel", "primer", "distemper", "varnish", "industrial", "specialty"];
 
 export default function Products() {
   const [products, setProducts] = useState([]);

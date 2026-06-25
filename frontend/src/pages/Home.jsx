@@ -49,9 +49,9 @@ export default function Home() {
 
             <div className="mt-12 grid grid-cols-2 sm:grid-cols-4 gap-6 max-w-2xl">
               <Stat n="40+" label="Years in business" />
-              <Stat n="2" label="Brand lines" />
+              <Stat n="3" label="Brand portfolio" />
               <Stat n="116" label="Curated shades" />
-              <Stat n="9" label="Product range" />
+              <Stat n="20" label="Products" />
             </div>
           </div>
 
@@ -107,49 +107,57 @@ export default function Home() {
 
         <div className="grid md:grid-cols-2 gap-6">
           {/* Vespa Card */}
-          <div className="relative bg-white border border-neutral-200 p-10 group hover:-translate-y-1 transition-transform" data-testid="brand-card-vespa">
-            <div className="flex items-start justify-between mb-8">
-              <span className="line-pill vespa">Standard line</span>
-              <span className="font-mono text-xs text-neutral-500">01</span>
+          <Link to="/products?line=vespa" className="relative bg-white border border-neutral-200 group hover:-translate-y-1 transition-transform overflow-hidden" data-testid="brand-card-vespa">
+            <div className="aspect-[16/9] overflow-hidden" style={{ background: "#0A2E66" }}>
+              <img src="https://customer-assets.emergentagent.com/job_color-explorer-6/artifacts/98kradn4_image.png" alt="Vespa Interior/Exterior Emulsion Paint" className="w-full h-full object-contain p-8" />
             </div>
-            <h3 className="font-display text-5xl mb-2" style={{ color: "var(--ink)" }}>VESPA</h3>
-            <div className="font-serif-italic text-lg text-neutral-500 mb-6">Reliable. Workhorse.</div>
-            <p className="text-neutral-700 leading-relaxed mb-8">
-              Vespa delivers reliable, workhorse coatings for everyday industrial and decorative needs — trusted on construction sites, factories, and homes across India.
-            </p>
-            <div className="grid grid-cols-2 gap-y-3 text-sm border-t border-neutral-200 pt-6">
-              <div><div className="overline text-neutral-500 mb-1">Range</div><div>4 products</div></div>
-              <div><div className="overline text-neutral-500 mb-1">Best for</div><div>Daily use</div></div>
-              <div><div className="overline text-neutral-500 mb-1">Coverage</div><div>12-15 m²/lt</div></div>
-              <div><div className="overline text-neutral-500 mb-1">Pricing</div><div>Workhorse value</div></div>
+            <div className="p-8">
+              <div className="flex items-start justify-between mb-4">
+                <span className="line-pill vespa">Standard line</span>
+                <span className="font-mono text-xs text-neutral-500">01</span>
+              </div>
+              <div className="font-serif-italic text-lg text-neutral-500 mb-4">Reliable. Workhorse.</div>
+              <p className="text-neutral-700 leading-relaxed mb-6 text-sm">
+                Vespa delivers reliable, workhorse coatings for everyday industrial and decorative needs — trusted on construction sites, factories, and homes across India.
+              </p>
+              <div className="grid grid-cols-2 gap-y-3 text-sm border-t border-neutral-200 pt-5">
+                <div><div className="overline text-neutral-500 mb-1">Range</div><div>8 products</div></div>
+                <div><div className="overline text-neutral-500 mb-1">Best for</div><div>Daily use</div></div>
+                <div><div className="overline text-neutral-500 mb-1">Coverage</div><div>12-15 m²/lt</div></div>
+                <div><div className="overline text-neutral-500 mb-1">Pricing</div><div>Workhorse value</div></div>
+              </div>
+              <div className="mt-6 inline-flex items-center gap-2 text-sm font-semibold" style={{ color: "var(--navy)" }} data-testid="explore-vespa">
+                Explore Vespa <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+              </div>
             </div>
-            <Link to="/products?line=vespa" className="mt-8 inline-flex items-center gap-2 text-sm font-semibold" style={{ color: "var(--navy)" }} data-testid="explore-vespa">
-              Explore Vespa <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-            </Link>
-          </div>
+          </Link>
 
           {/* Galleria Card */}
-          <div className="relative border p-10 group hover:-translate-y-1 transition-transform overflow-hidden" style={{ background: "var(--navy)", color: "#fff", borderColor: "var(--navy)" }} data-testid="brand-card-galleria">
-            <div className="absolute top-0 right-0 w-32 h-32 opacity-20" style={{ background: "radial-gradient(circle at top right, var(--paint-yellow), transparent 70%)" }} />
-            <div className="flex items-start justify-between mb-8 relative">
-              <span className="line-pill galleria !bg-white !text-[color:var(--navy)] !border-white">Premium line</span>
-              <span className="font-mono text-xs text-white/60">02</span>
+          <Link to="/products?line=galleria" className="relative group hover:-translate-y-1 transition-transform overflow-hidden border" style={{ background: "var(--navy)", color: "#fff", borderColor: "var(--navy)" }} data-testid="brand-card-galleria">
+            <div className="aspect-[16/9] overflow-hidden">
+              <img src="https://customer-assets.emergentagent.com/job_color-explorer-6/artifacts/czd1adua_image.png" alt="Galleria Weatherproof" className="w-full h-full object-contain p-8" />
             </div>
-            <h3 className="font-display text-5xl mb-2">GALLERIA</h3>
-            <div className="font-serif-italic text-lg text-white/70 mb-6">Premium. Refined.</div>
-            <p className="text-white/85 leading-relaxed mb-8">
-              Galleria is our premium line — engineered for superior coverage, enhanced performance, and a refined finish. High-grade pigments and binders for specification-grade projects.
-            </p>
-            <div className="grid grid-cols-2 gap-y-3 text-sm border-t border-white/20 pt-6">
-              <div><div className="overline text-white/50 mb-1">Range</div><div>5 products</div></div>
-              <div><div className="overline text-white/50 mb-1">Best for</div><div>Specification</div></div>
-              <div><div className="overline text-white/50 mb-1">Coverage</div><div>15-22 m²/lt</div></div>
-              <div><div className="overline text-white/50 mb-1">Pigments</div><div>Fade-resistant</div></div>
+            <div className="p-8 relative">
+              <div className="absolute top-0 right-0 w-32 h-32 opacity-20 pointer-events-none" style={{ background: "radial-gradient(circle at top right, var(--paint-yellow), transparent 70%)" }} />
+              <div className="flex items-start justify-between mb-4 relative">
+                <span className="line-pill galleria !bg-white !text-[color:var(--navy)] !border-white">Premium line</span>
+                <span className="font-mono text-xs text-white/60">02</span>
+              </div>
+              <div className="font-serif-italic text-lg text-white/70 mb-4">Premium. Weatherproof.</div>
+              <p className="text-white/85 leading-relaxed mb-6 text-sm">
+                Galleria is our premium line — engineered for superior coverage, weatherproof exteriors, and a refined finish. High-grade pigments and binders for specification-grade projects.
+              </p>
+              <div className="grid grid-cols-2 gap-y-3 text-sm border-t border-white/20 pt-5">
+                <div><div className="overline text-white/50 mb-1">Range</div><div>5 products</div></div>
+                <div><div className="overline text-white/50 mb-1">Best for</div><div>Specification</div></div>
+                <div><div className="overline text-white/50 mb-1">Coverage</div><div>15-22 m²/lt</div></div>
+                <div><div className="overline text-white/50 mb-1">Pigments</div><div>Fade-resistant</div></div>
+              </div>
+              <div className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-white" data-testid="explore-galleria">
+                Explore Galleria <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+              </div>
             </div>
-            <Link to="/products?line=galleria" className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-white" data-testid="explore-galleria">
-              Explore Galleria <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-            </Link>
-          </div>
+          </Link>
         </div>
       </section>
 
@@ -190,7 +198,7 @@ export default function Home() {
       {/* WHY US */}
       <section className="max-w-7xl mx-auto px-6 lg:px-12 py-24">
         <div className="grid md:grid-cols-4 gap-8">
-          <Feature icon={Factory} title="Made since 1982" desc="Four decades of in-house manufacturing in India." />
+          <Feature icon={Factory} title="Made since 1983" desc="Four decades of in-house manufacturing from Chandni Chowk, Delhi." />
           <Feature icon={Beaker} title="Engineered formulas" desc="Continuously upgraded under rigorous quality control." />
           <Feature icon={ShieldCheck} title="Corrosion resistant" desc="Specification-grade primers and protective coatings." />
           <Feature icon={Award} title="DO IT RIGHT" desc="Our manufacturing creed — don't regret a single coat." />

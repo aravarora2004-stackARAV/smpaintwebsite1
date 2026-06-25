@@ -31,9 +31,9 @@ export function PublicLayout({ children }) {
         <div className="max-w-7xl mx-auto px-6 lg:px-12 h-9 flex items-center justify-between text-[11px] tracking-[0.18em] uppercase font-medium">
           <span>{cfg.tagline}</span>
           <span className="flex items-center gap-6">
-            <span>Vespa</span>
+            <a href={`mailto:${cfg.email || "smpaints2001@gmail.com"}`} className="hover:text-[color:var(--paint-yellow)] normal-case tracking-normal text-[12px]">{cfg.email || "smpaints2001@gmail.com"}</a>
             <span style={{ color: "var(--paint-yellow)" }}>·</span>
-            <span>Galleria</span>
+            <a href={`tel:${(cfg.phone || "+917669153715").replace(/\s/g,'')}`} className="hover:text-[color:var(--paint-yellow)] normal-case tracking-normal text-[12px]">{cfg.phone || "+91 76691 53715"}</a>
           </span>
         </div>
       </div>
@@ -114,9 +114,9 @@ export function PublicLayout({ children }) {
           <div className="md:col-span-4">
             <div className="overline text-white/50 mb-4">Contact</div>
             <div className="text-sm text-white/80 space-y-1.5">
-              <div>hello@smpaints.in</div>
-              <div>+91 9999 999 999</div>
-              <div>Manufacturing unit · India</div>
+              <div><a href="mailto:smpaints2001@gmail.com" className="hover:text-[color:var(--paint-yellow)]">smpaints2001@gmail.com</a></div>
+              <div><a href="tel:+917669153715" className="hover:text-[color:var(--paint-yellow)]">+91 76691 53715</a></div>
+              <div>Chandni Chowk, New Delhi · India</div>
               <div className="pt-4">
                 <Link to="/admin/login" className="text-xs text-white/40 hover:text-white" data-testid="footer-admin-link">Dealer / Admin login</Link>
               </div>

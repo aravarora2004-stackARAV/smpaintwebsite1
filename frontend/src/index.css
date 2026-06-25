@@ -114,6 +114,9 @@ body {
 .line-pill.galleria::before {
     content: ""; width: 6px; height: 6px; background: var(--paint-yellow); border-radius: 999px;
 }
+.line-pill.general {
+    background: transparent; color: var(--text-2); border-color: rgba(11,18,32,0.25);
+}
 
 .fade-up { animation: fadeUp 0.7s ease-out both; }
 @keyframes fadeUp {
