@@ -1,0 +1,160 @@
+{
+  "brand_identity": {
+    "name": "Chroma Paints",
+    "domain": "Premium Paint Manufacturer Catalogue & Admin",
+    "themes": {
+      "public_site": {
+        "theme": "Light",
+        "archetype": "Archetype 5 (Luxury)",
+        "vibe": "Premium, cinematic, tactile, editorial elegance. Color is the absolute hero."
+      },
+      "admin_panel": {
+        "theme": "Light",
+        "archetype": "Archetype 4 (Swiss & High-Contrast)",
+        "vibe": "Functional, objective, dense data hierarchy."
+      }
+    }
+  },
+  "typography": {
+    "font_families": {
+      "heading": "Playfair Display, serif",
+      "body": "Manrope, sans-serif",
+      "mono": "JetBrains Mono, monospace"
+    },
+    "scales": {
+      "h1": "text-5xl sm:text-6xl font-light tracking-tight leading-none",
+      "h2": "text-3xl sm:text-4xl font-normal tracking-tight",
+      "h3": "text-2xl sm:text-3xl font-normal",
+      "h4": "text-xl sm:text-2xl",
+      "body": "text-base leading-relaxed tracking-normal",
+      "overline": "text-xs uppercase tracking-[0.2em] font-semibold"
+    },
+    "rules": {
+      "anti_default": "No Inter, Roboto, or Open Sans. Do not default to bold for headers.",
+      "alignment": "Left-align paragraphs, inputs, dense content. Headings can be centered if balancing a hero section.",
+      "hierarchy_gap": "Jump between heading and subheading must not exceed 2 Tailwind steps."
+    }
+  },
+  "colors": {
+    "public_palette": {
+      "background": "#F9F8F6",
+      "surface": "#FFFFFF",
+      "text_primary": "#1A1A1A",
+      "text_secondary": "#5C5C5C",
+      "brand_primary": "#1A1A1A",
+      "accent_sage": "#8C9986",
+      "accent_terracotta": "#B65A4B",
+      "border": "rgba(26, 26, 26, 0.1)"
+    },
+    "admin_palette": {
+      "background": "#F8FAFC",
+      "surface": "#FFFFFF",
+      "primary": "#0F172A",
+      "border": "#E2E8F0"
+    },
+    "rules": {
+      "tinted_grey": "Never use pure #000000 or #808080. Always tint greys.",
+      "hover_state": "Always explicitly set text color on hover (e.g., hover:bg-black hover:text-white).",
+      "contrast": "Minimum 4.5:1 for normal text, 3:1 for large text. Avoid transparent text overlays on images without scrims."
+    }
+  },
+  "spacing_and_layout": {
+    "spacing_scale": "p-1, p-2, p-4, p-6, p-8, p-12, p-16, p-20, p-24, p-32",
+    "generous_spacing": "Use 2-3x more spacing than typical SaaS. Containers with borders MUST have internal padding (p-8).",
+    "grids": {
+      "public": "MODE A: TETRIS GRID. Asymmetry, wide gaps (gap-8 to gap-12). Leave breathing room.",
+      "admin": "MODE B: CONTROL ROOM GRID. Density, tight gaps (gap-4 or gap-6). Ensure full height children."
+    },
+    "alignment": "Mobile-first. Use optical alignment for buttons/icons."
+  },
+  "components": {
+    "navigation": {
+      "type": "Sticky Header",
+      "style": "Glassmorphism: backdrop-blur-xl bg-[#F9F8F6]/80, 1px inner stroke border-black/10.",
+      "rules": "Must have Logo, 3-5 links visible on desktop, primary CTA."
+    },
+    "buttons": {
+      "style": "Flat, sharp edges (rounded-none) or very subtle (rounded-sm). Minimalist luxury.",
+      "hover": "High contrast inversion. border border-black hover:bg-black hover:text-white."
+    },
+    "cards_and_surfaces": {
+      "public_products": "No generic drop shadows. Flat solid with 1px border. Hover causes slight lift (-translate-y-1).",
+      "color_swatches": "Large, tactile blocks. Avoid tiny circles; use large squares or elegant rectangles to show color.",
+      "admin_widgets": "Neumorphism tactile variant or simple flat with border-slate-200. Sharp inner contrasts."
+    },
+    "forms": {
+      "style": "Shadcn components heavily customized. Stripped 'Vercel-look'. Use pure HTML+Tailwind for layout, Shadcn for logic.",
+      "inputs": "Underline only or minimalist borders. Focus state must have higher contrast (focus:ring-black)."
+    },
+    "icons": {
+      "library": "lucide-react",
+      "weight": "Thin or regular, avoid bulky icons."
+    }
+  },
+  "motion_and_interactions": {
+    "hover_states": "Required on all interactive elements.",
+    "transitions": "Specific properties only (e.g., transition: transform 0.3s ease, opacity 0.3s ease).",
+    "entrance": "Staggered fade-in for product grids and gallery items.",
+    "accessibility": "Respect prefers-reduced-motion. Focus management required."
+  },
+  "features_implementation": {
+    "hero_landing": "Max overlay opacity bg-black/40. If text needs contrast, use gradient overlay.",
+    "product_catalogue": "Bento-style layout. Filters (category, finish) on the left or top elegant bar.",
+    "product_detail": "Editorial layout. Large image on one side, specs, swatches, pack sizes on the other.",
+    "color_explorer": "Immersive color blocks. Hex codes and names visible. Grouped by family (reds, blues, neutrals).",
+    "project_gallery": "Asymmetrical image grid. Tetris style. Images must not exceed 80vh on mobile.",
+    "dealer_locator": "Clean Shadcn form. Contact info clearly structured.",
+    "whatsapp_button": "Floating bottom right. Green accent color (#25D366) allowed here for brand recognition.",
+    "admin_panel": "Login-gated. Sidebar navigation. Tables for CRUD operations and inquiries."
+  },
+  "testing": {
+    "attributes": "All interactive and key informational elements MUST include `data-testid` attribute (kebab-case, role-based)."
+  },
+  "media": {
+    "hero_images": [
+      {
+        "url": "https://images.unsplash.com/photo-1759774313632-854207c22ec1?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA3MDB8MHwxfHNlYXJjaHwxfHxsdXh1cmlvdXMlMjBsaXZpbmclMjByb29tJTIwcGFpbnRlZCUyMHdhbGwlMjBpbnRlcmlvciUyMGRlc2lnbnxlbnwwfHx8fDE3ODIzNzQ2NTB8MA&ixlib=rb-4.1.0&q=85",
+        "category": "hero",
+        "description": "Antique luxurious room with chandelier, serves as a high-end inspirational hero."
+      },
+      {
+        "url": "https://images.pexels.com/photos/19899076/pexels-photo-19899076.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+        "category": "gallery_interior",
+        "description": "Sleek gray modern living room."
+      }
+    ],
+    "exterior_images": [
+      {
+        "url": "https://images.unsplash.com/photo-1560184897-ae75f418493e?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzd8MHwxfHNlYXJjaHwxfHxob3VzZSUyMGV4dGVyaW9yJTIwcGFpbnRpbmclMjBiZWF1dGlmdWwlMjBob21lfGVufDB8fHx8MTc4MjM3NDY1MXww&ixlib=rb-4.1.0&q=85",
+        "category": "gallery_exterior",
+        "description": "Porch with beautifully painted blue exterior walls."
+      }
+    ],
+    "texture_and_swatch_images": [
+      {
+        "url": "https://images.pexels.com/photos/6563575/pexels-photo-6563575.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+        "category": "color_explorer_hero",
+        "description": "Vibrant watercolor swatches on textured surface, perfect for the color palette explorer section."
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1543857778-c4a1a3e0b2eb?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxOTJ8MHwxfHNlYXJjaHwxfHxwYWludCUyMGJydXNoJTIwdGV4dHVyZSUyMHN3YXRjaCUyMGNvbG9yZnVsfGVufDB8fHx8MTc4MjM3NDY1MHww&ixlib=rb-4.1.0&q=85",
+        "category": "abstract_accent",
+        "description": "Colorful abstract painting texture."
+      }
+    ],
+    "product_images": [
+      {
+        "url": "https://images.pexels.com/photos/1887946/pexels-photo-1887946.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+        "category": "product_placeholder",
+        "description": "Vivid assortment of open paint cans displaying a spectrum of colors."
+      }
+    ]
+  },
+  "instructions_to_main_agent": [
+    "Install and use 'lucide-react' for all icon needs.",
+    "Use standard HTML/Tailwind for the marketing layout, but leverage Shadcn logic for interactive parts (Forms, Modals).",
+    "Public site MUST feel premium, spacious (use p-12 to p-24 for section paddings), and tactile. The color swatches must be prominent.",
+    "Do not use Shadcn Card component for the marketing layouts; use raw divs to allow asymmetry.",
+    "Ensure the Admin panel is cleanly separated (e.g. under /admin route) and utilizes Shadcn tables and forms extensively."
+  ]
+}
