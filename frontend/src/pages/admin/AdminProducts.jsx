@@ -15,7 +15,7 @@ const EMPTY = {
 };
 
 const LINES = ["vespa", "galleria", "general"];
-const CATEGORIES = ["enamel", "primer", "distemper", "varnish", "industrial", "specialty"];
+const CATEGORIES = ["emulsion", "enamel", "primer", "distemper", "varnish", "industrial", "specialty", "waterproofing"];
 const FINISHES = ["matte", "satin", "gloss", "lustrous", "textured", "transparent"];
 
 export default function AdminProducts() {

@@ -32,6 +32,12 @@
 - Admin CRUD for Products, Colors, Gallery
 - Admin Inquiries list with status select + delete
 
+## Updates (Feb 2026)
+- Re-mapped 4 product images to actual client photos: Vespa Interior Emulsion, Galleria White Primer, Galleria Red Oxide Primer, Galleria Hammertone Paint
+- Added new product **Vespa Black Rubber Seal** (waterproofing / flexible coating) with own product photo
+- Extended Finish Literal to include `flexible`; added `waterproofing` to Products & AdminProducts category filters
+- Total seeded products: 20
+
 ## Credentials
 - Admin: `admin@chromapaints.com` / `ChromaAdmin@2025`
 

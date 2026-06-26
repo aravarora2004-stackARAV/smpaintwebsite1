@@ -4,7 +4,7 @@ import { ArrowRight } from "lucide-react";
 import { api } from "../lib/api";
 
 const LINES = ["all", "vespa", "galleria", "general"];
-const CATEGORIES = ["all", "emulsion", "enamel", "primer", "distemper", "varnish", "industrial", "specialty"];
+const CATEGORIES = ["all", "emulsion", "enamel", "primer", "distemper", "varnish", "industrial", "specialty", "waterproofing"];
 
 export default function Products() {
   const [products, setProducts] = useState([]);

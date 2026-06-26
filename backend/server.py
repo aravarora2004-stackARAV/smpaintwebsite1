@@ -87,7 +87,7 @@ async def require_admin(user: dict = Depends(get_current_user)) -> dict:
 
 # -------------------- Models --------------------
 ProductLine = Literal["vespa", "galleria", "general"]
-Finish = Literal["matte", "satin", "gloss", "lustrous", "textured", "transparent"]
+Finish = Literal["matte", "satin", "gloss", "lustrous", "textured", "transparent", "flexible"]
 
 
 class ProductIn(BaseModel):
@@ -414,7 +414,7 @@ SEED_PRODUCTS = [
         "thinner": "Water (15-20% by volume)",
         "recommended_primer": "Vespa White Primer (new walls) or as required",
         "available_shades": "All shade card shades on tint base",
-        "image_url": "https://customer-assets.emergentagent.com/job_color-explorer-6/artifacts/do545o2t_image.png",
+        "image_url": "https://customer-assets.emergentagent.com/job_color-explorer-6/artifacts/168ncut8_image.png",
         "featured": True, "sort_order": 1,
     },
     {
@@ -515,6 +515,22 @@ SEED_PRODUCTS = [
         "image_url": "https://customer-assets.emergentagent.com/job_color-explorer-6/artifacts/k1vg5t3x_image.png",
         "featured": False, "sort_order": 7,
     },
+    {
+        "name": "Vespa Black Rubber Seal",
+        "line": "vespa", "category": "waterproofing", "finish": "flexible",
+        "short_description": "Flexible rubberised waterproof coating for roofs, terraces & wet areas.",
+        "description": "Vespa Black Rubber Seal is a high-build, rubberised liquid waterproofing coating that cures into a seamless, highly flexible membrane. Engineered for terraces, roofs, parapets, gutters, sunshades, and wet areas — it bridges hairline cracks, resists ponding water, and withstands UV, monsoon, and thermal movement. A reliable one-coat-system waterproofer for both new and existing surfaces.",
+        "features": ["Seamless rubberised waterproof membrane", "Highly flexible & crack-bridging", "UV, monsoon & ponding-water resistant", "Excellent adhesion to concrete, masonry & metal", "Withstands thermal expansion & contraction", "Easy brush / roller / spray application"],
+        "coverage": "8-10 sq.ft/kg/coat", "coverage_detail": "8-10 sq.ft/kg/coat (2 coats recommended for full waterproof system)",
+        "drying_time": "Surface dry: 2-3 hrs", "recoat_time": "Recoat: 6-8 hrs  |  Full cure: 7 days",
+        "application": "Brush, Roller, Spray. Apply 2 coats at right angles.",
+        "pack_sizes": ["1 kg", "4 kg", "10 kg", "20 kg"],
+        "thinner": "Ready to use. Do not thin.",
+        "recommended_primer": "Clean, dust-free, moist substrate. Self-priming.",
+        "available_shades": "Black",
+        "image_url": "https://customer-assets.emergentagent.com/job_color-explorer-6/artifacts/fia76yyu_image.png",
+        "featured": True, "sort_order": 8,
+    },
     # ============ GALLERIA LINE ============
     {
         "name": "Galleria Premium Synthetic Enamel",
@@ -546,7 +562,7 @@ SEED_PRODUCTS = [
         "thinner": "M.T.O (Mineral Turpentine Oil)",
         "recommended_primer": "—",
         "available_shades": "White, Pink",
-        "image_url": "https://customer-assets.emergentagent.com/job_color-explorer-6/artifacts/6gbpbvvq_image.png",
+        "image_url": "https://customer-assets.emergentagent.com/job_color-explorer-6/artifacts/fxk15urd_image.png",
         "featured": False, "sort_order": 12,
     },
     {
@@ -562,7 +578,7 @@ SEED_PRODUCTS = [
         "thinner": "M.T.O (Mineral Turpentine Oil)",
         "recommended_primer": "—",
         "available_shades": "Red Oxide",
-        "image_url": "https://customer-assets.emergentagent.com/job_color-explorer-6/artifacts/ygxiu6ov_image.png",
+        "image_url": "https://customer-assets.emergentagent.com/job_color-explorer-6/artifacts/72v7y4e7_image.png",
         "featured": False, "sort_order": 13,
     },
     {
@@ -627,7 +643,7 @@ SEED_PRODUCTS = [
         "thinner": "M.T.O (max 5-10%)",
         "recommended_primer": "Red Oxide Primer or self-priming on prepared surfaces",
         "available_shades": "Silver, Black, Red, Blue, Green, Golden Bronze",
-        "image_url": "https://customer-assets.emergentagent.com/job_color-explorer-6/artifacts/95cm8jdt_image.png",
+        "image_url": "https://customer-assets.emergentagent.com/job_color-explorer-6/artifacts/k68lxxyx_image.png",
         "featured": True, "sort_order": 18,
     },
     {
