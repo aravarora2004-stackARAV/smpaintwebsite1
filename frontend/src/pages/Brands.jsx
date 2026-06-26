@@ -55,8 +55,8 @@ export default function Brands() {
       <section className="max-w-7xl mx-auto px-6 lg:px-12 py-20" data-testid="brand-vespa">
         <div className="grid lg:grid-cols-12 gap-12 items-start">
           <div className="lg:col-span-5">
-            <div className="aspect-square mb-8" style={{ background: "#0A2E66" }}>
-              <img src="https://customer-assets.emergentagent.com/job_color-explorer-6/artifacts/98kradn4_image.png" alt="Vespa" className="w-full h-full object-contain p-10" />
+            <div className="aspect-[5/2] mb-8" style={{ background: "#0A2E66" }}>
+              <img src="https://customer-assets.emergentagent.com/job_color-explorer-6/artifacts/98kradn4_image.png" alt="Vespa" className="w-full h-full object-contain p-4" />
             </div>
             <span className="line-pill vespa">Standard line</span>
             <div className="font-serif-italic text-xl text-neutral-500 mt-5 mb-6">Interior / Exterior Emulsion Paint.</div>
@@ -82,8 +82,8 @@ export default function Brands() {
       <section style={{ background: "var(--ink)", color: "#fff" }} data-testid="brand-galleria">
         <div className="max-w-7xl mx-auto px-6 lg:px-12 py-20 grid lg:grid-cols-12 gap-12 items-start">
           <div className="lg:col-span-5">
-            <div className="aspect-square mb-8" style={{ background: "#0A2E66" }}>
-              <img src="https://customer-assets.emergentagent.com/job_color-explorer-6/artifacts/czd1adua_image.png" alt="Galleria" className="w-full h-full object-contain p-10" />
+            <div className="aspect-[5/2] mb-8" style={{ background: "#0A2E66" }}>
+              <img src="https://customer-assets.emergentagent.com/job_color-explorer-6/artifacts/czd1adua_image.png" alt="Galleria" className="w-full h-full object-contain p-4" />
             </div>
             <span className="line-pill galleria !bg-white !text-[color:var(--navy)] !border-white">Premium line</span>
             <div className="font-serif-italic text-xl text-white/70 mt-5 mb-6">Weatherproof. Premium grade.</div>

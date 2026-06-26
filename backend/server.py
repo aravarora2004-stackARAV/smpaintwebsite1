@@ -414,7 +414,7 @@ SEED_PRODUCTS = [
         "thinner": "Water (15-20% by volume)",
         "recommended_primer": "Vespa White Primer (new walls) or as required",
         "available_shades": "All shade card shades on tint base",
-        "image_url": "https://images.unsplash.com/photo-1759774313632-854207c22ec1?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA3MDB8MHwxfHNlYXJjaHwxfHxsdXh1cmlvdXMlMjBsaXZpbmclMjByb29tJTIwcGFpbnRlZCUyMHdhbGwlMjBpbnRlcmlvciUyMGRlc2lnbnxlbnwwfHx8fDE3ODIzNzQ2NTB8MA&ixlib=rb-4.1.0&q=85",
+        "image_url": "https://customer-assets.emergentagent.com/job_color-explorer-6/artifacts/do545o2t_image.png",
         "featured": True, "sort_order": 1,
     },
     {
@@ -546,11 +546,11 @@ SEED_PRODUCTS = [
         "thinner": "M.T.O (Mineral Turpentine Oil)",
         "recommended_primer": "—",
         "available_shades": "White, Pink",
-        "image_url": "https://images.pexels.com/photos/6563575/pexels-photo-6563575.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+        "image_url": "https://customer-assets.emergentagent.com/job_color-explorer-6/artifacts/6gbpbvvq_image.png",
         "featured": False, "sort_order": 12,
     },
     {
-        "name": "Galleria Red Oxide Primer Paint",
+        "name": "Galleria Red Oxide Primer",
         "line": "galleria", "category": "primer", "finish": "matte",
         "short_description": "Premium anti-corrosive red oxide primer with superior metal adhesion.",
         "description": "Galleria's premium red oxide primer — engineered with high-purity iron oxide pigment and high-grade alkyd binders for superior corrosion resistance, double coverage, and excellent adhesion on ferrous metals.",
@@ -562,7 +562,7 @@ SEED_PRODUCTS = [
         "thinner": "M.T.O (Mineral Turpentine Oil)",
         "recommended_primer": "—",
         "available_shades": "Red Oxide",
-        "image_url": "https://images.pexels.com/photos/6563575/pexels-photo-6563575.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+        "image_url": "https://customer-assets.emergentagent.com/job_color-explorer-6/artifacts/ygxiu6ov_image.png",
         "featured": False, "sort_order": 13,
     },
     {
@@ -578,7 +578,7 @@ SEED_PRODUCTS = [
         "thinner": "M.T.O (Mineral Turpentine Oil)",
         "recommended_primer": "Galleria White Primer",
         "available_shades": "Matt Black, Matt Green",
-        "image_url": "https://images.pexels.com/photos/19899076/pexels-photo-19899076.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+        "image_url": "https://customer-assets.emergentagent.com/job_color-explorer-6/artifacts/4s94axvn_image.png",
         "featured": False, "sort_order": 14,
     },
     # ============ GENERAL / SISTER BRAND ============
@@ -627,7 +627,7 @@ SEED_PRODUCTS = [
         "thinner": "M.T.O (max 5-10%)",
         "recommended_primer": "Red Oxide Primer or self-priming on prepared surfaces",
         "available_shades": "Silver, Black, Red, Blue, Green, Golden Bronze",
-        "image_url": "https://images.unsplash.com/photo-1543857778-c4a1a3e0b2eb?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxOTJ8MHwxfHNlYXJjaHwxfHxwYWludCUyMGJydXNoJTIwdGV4dHVyZSUyMHN3YXRjaCUyMGNvbG9yZnVsfGVufDB8fHx8MTc4MjM3NDY1MHww&ixlib=rb-4.1.0&q=85",
+        "image_url": "https://customer-assets.emergentagent.com/job_color-explorer-6/artifacts/95cm8jdt_image.png",
         "featured": True, "sort_order": 18,
     },
     {
