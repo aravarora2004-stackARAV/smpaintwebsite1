@@ -10,6 +10,8 @@ export default function Contact() {
   useEffect(() => { const p = params.get("product"); if (p) setForm((f) => ({ ...f, product_interest: p })); }, [params]);
   const [sending, setSending] = useState(false);
   const [done, setDone] = useState(false);
+  const [site, setSite] = useState(null);
+  useEffect(() => { api.get("/site/config").then((r) => setSite(r.data)).catch(() => {}); }, []);
 
   const onChange = (k) => (e) => setForm({ ...form, [k]: e.target.value });
 
@@ -44,9 +46,10 @@ export default function Contact() {
         </p>
 
         <div className="mt-10 space-y-4">
-          <Detail label="Email" value="hello@chromapaints.com" />
-          <Detail label="Phone" value="+91 9999 999 999" />
-          <Detail label="Studio" value="Plot 17, Industrial Estate, Mumbai" />
+          <Detail label="Email" value={site?.email || "smpaints2001@gmail.com"} />
+          <Detail label="Phone" value={site?.phone || "+91 76691 53715"} />
+          <Detail label="Address" value={site?.location || "Chandni Chowk, Delhi"} />
+          <Detail label="WhatsApp" value={`+${site?.whatsapp_number || "917669153715"}`} />
           <Detail label="Hours" value="Mon — Sat, 10:00 to 19:00" />
         </div>
       </div>

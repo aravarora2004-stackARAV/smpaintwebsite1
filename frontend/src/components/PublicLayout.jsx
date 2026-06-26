@@ -3,7 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { Menu, X, MessageCircle } from "lucide-react";
 import { api } from "../lib/api";
 
-const SHADE_CARD_PDF = "https://customer-assets.emergentagent.com/job_color-explorer-6/artifacts/rn4b1406_SM%20PAINT%20SHADE%20CARD%20FINAL.pdf";
+const SHADE_CARD_PDF = "https://drive.google.com/file/d/1l96sYgM3wdMgGpdAs842_eAFRJDGB8xl/view";
 
 const links = [
   { to: "/", label: "Home" },
@@ -60,14 +60,27 @@ export function PublicLayout({ children }) {
 
           <nav className="hidden lg:flex items-center gap-9">
             {links.map((l) => (
-              <Link
-                key={l.to}
-                to={l.to}
-                className={`text-[13px] font-semibold tracking-wide transition-colors uppercase ${loc.pathname === l.to ? "text-[color:var(--navy)]" : "text-neutral-500 hover:text-[color:var(--navy)]"}`}
-                data-testid={`nav-${l.label.toLowerCase().replace(/\s/g,'-')}`}
-              >
-                {l.label}
-              </Link>
+              l.external ? (
+                <a
+                  key={l.to}
+                  href={l.to}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-[13px] font-semibold tracking-wide transition-colors uppercase text-neutral-500 hover:text-[color:var(--navy)]"
+                  data-testid={`nav-${l.label.toLowerCase().replace(/\s/g,'-')}`}
+                >
+                  {l.label}
+                </a>
+              ) : (
+                <Link
+                  key={l.to}
+                  to={l.to}
+                  className={`text-[13px] font-semibold tracking-wide transition-colors uppercase ${loc.pathname === l.to ? "text-[color:var(--navy)]" : "text-neutral-500 hover:text-[color:var(--navy)]"}`}
+                  data-testid={`nav-${l.label.toLowerCase().replace(/\s/g,'-')}`}
+                >
+                  {l.label}
+                </Link>
+              )
             ))}
             <Link to="/contact" className="btn-solid !py-2.5 !px-5 text-xs" data-testid="nav-cta-quote">Request Quote</Link>
           </nav>

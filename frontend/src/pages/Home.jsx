@@ -44,7 +44,7 @@ export default function Home() {
             </p>
             <div className="mt-9 flex items-center gap-4 flex-wrap">
               <Link to="/products" className="btn-solid" data-testid="hero-cta-products">View Catalogue <ArrowRight size={16} className="ml-2" /></Link>
-              <a href="https://customer-assets.emergentagent.com/job_color-explorer-6/artifacts/rn4b1406_SM%20PAINT%20SHADE%20CARD%20FINAL.pdf" target="_blank" rel="noreferrer" className="btn-line" data-testid="hero-cta-colors">Open Shade Card</a>
+              <a href="https://drive.google.com/file/d/1l96sYgM3wdMgGpdAs842_eAFRJDGB8xl/view" target="_blank" rel="noreferrer" className="btn-line" data-testid="hero-cta-colors">Open Shade Card</a>
             </div>
 
             <div className="mt-12 grid grid-cols-2 sm:grid-cols-4 gap-6 max-w-2xl">
