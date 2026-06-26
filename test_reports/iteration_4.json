@@ -1,0 +1,41 @@
+{
+  "summary": "End-to-end regression validation after code-quality refactor (env-var creds, useMemo/useCallback AuthProvider, stable key props in ProductDetail and Brands, hero image swap). Updated stale pytest counts to new 17-product catalogue and ran full backend pytest suite (15/15 passing). Frontend smoke-tested across Home, Products, Product Detail, Brands, and Admin login flows — no console errors and no React duplicate-key warnings on the refactored routes.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_sm_paints.py",
+    "/app/test_reports/pytest/pytest_results.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "Request mentioned admin login data-testids 'admin-email-input/admin-password-input/admin-login-btn' but actual AdminLogin.jsx uses 'login-email/login-password/login-submit'. Either align the request docs or rename the testids for consistency with the rest of the admin pages.",
+    "test_sm_paints.py pytest file had stale product-count assertions (20/8/5/7). Updated to new catalogue (17 total / 10 vespa / 7 galleria / 0 general) and added explicit assertions for the 5 removed legacy products and presence of newly added Vespa Black Japan and Galleria Aluminium Paint.",
+    "Backend exposes 0 'general' line products yet the Products page UI still offers a General line filter — confirm this is intentional (no-op filter currently returns an empty grid)."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_sm_paints.py"
+  ],
+  "success_rate": {"backend": "100%", "frontend": "100%"},
+  "test_credentials": "admin@chromapaints.com / ChromaAdmin@2025 (from /app/memory/test_credentials.md) — verified working",
+  "seed_data_creation": "None. Pytest admin CRUD test creates+deletes a TEST_General_X product transactionally.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Live catalogue is 17 products: 10 vespa + 7 galleria + 0 general. Featured count = 8. Colors = 116 across 4 collections. Admin login testids in AdminLogin.jsx are 'login-email', 'login-password', 'login-submit' (NOT the 'admin-*' aliases mentioned in some requests). Hero on Home has testid 'hero-cover-image'. Brands page uses CSS grid (not <table>); ROWS has 9 unique labels keyed by row.label. ProductDetail features map keys by feature text. Both pages verified zero duplicate-key console warnings.",
+  "rca of the issue": "N/A — no regressions found. Pytest count drift was a stale-fixture issue and has been corrected.",
+  "verification_evidence": {
+    "pytest": "15 passed in 1.59s",
+    "api_counts": {"total": 17, "vespa": 10, "galleria": 7, "general": 0, "featured": 8, "colors": 116},
+    "removed_legacy_products_absent": true,
+    "newly_added_present": ["Vespa Black Japan", "Galleria Aluminium Paint"],
+    "admin_login": "Successful — landed on /admin Overview showing 17 products, 116 colors",
+    "console_errors_home_products_detail_brands_admin": "none",
+    "duplicate_key_warnings": "none on /products/:id and /brands"
+  }
+}

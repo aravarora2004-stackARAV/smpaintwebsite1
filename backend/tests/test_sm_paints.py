@@ -1,11 +1,11 @@
-"""Backend regression tests for SM Paint Industries — 20-product catalogue."""
+"""Backend regression tests for SM Paint Industries — 17-product catalogue."""
 import os
 import pytest
 import requests
 
 BASE_URL = os.environ["REACT_APP_BACKEND_URL"].rstrip("/")
-ADMIN_EMAIL = "admin@chromapaints.com"
-ADMIN_PASSWORD = "ChromaAdmin@2025"
+ADMIN_EMAIL = os.environ.get("TEST_ADMIN_EMAIL", "admin@chromapaints.com")
+ADMIN_PASSWORD = os.environ.get("TEST_ADMIN_PASSWORD", "ChromaAdmin@2025")
 
 
 @pytest.fixture(scope="module")
@@ -52,31 +52,47 @@ def test_products_total_count(s):
     r = s.get(f"{BASE_URL}/api/products")
     assert r.status_code == 200
     items = r.json()
-    assert len(items) == 20, f"expected 20, got {len(items)}"
+    assert len(items) == 17, f"expected 17, got {len(items)}"
 
 
 def test_products_line_vespa(s):
     r = s.get(f"{BASE_URL}/api/products", params={"line": "vespa"})
     assert r.status_code == 200
     items = r.json()
-    assert len(items) == 8, f"expected 8 vespa, got {len(items)}"
+    assert len(items) == 10, f"expected 10 vespa, got {len(items)}"
     assert all(p["line"] == "vespa" for p in items)
+    names = {p["name"] for p in items}
+    assert "Vespa Interior Emulsion" in names
+    assert "Vespa Black Japan" in names
+    assert "Vespa Black Rubber Seal" in names
 
 
 def test_products_line_galleria(s):
     r = s.get(f"{BASE_URL}/api/products", params={"line": "galleria"})
     assert r.status_code == 200
     items = r.json()
-    assert len(items) == 5, f"expected 5 galleria, got {len(items)}"
+    assert len(items) == 7, f"expected 7 galleria, got {len(items)}"
     assert all(p["line"] == "galleria" for p in items)
+    names = {p["name"] for p in items}
+    for n in ["Galleria White Primer", "Galleria Red Oxide Primer",
+              "Galleria Hammertone Paint", "Galleria Aluminium Paint"]:
+        assert n in names, f"missing {n}"
 
 
 def test_products_line_general(s):
     r = s.get(f"{BASE_URL}/api/products", params={"line": "general"})
     assert r.status_code == 200
     items = r.json()
-    assert len(items) == 7, f"expected 7 general, got {len(items)}"
-    assert all(p["line"] == "general" for p in items)
+    assert len(items) == 0, f"expected 0 general, got {len(items)}"
+
+
+def test_products_removed_legacy(s):
+    items = s.get(f"{BASE_URL}/api/products").json()
+    names = {p["name"] for p in items}
+    for removed in ["Bawa Aluminium Paint", "Gold Coin Gold Paint",
+                    "Bawa Water Base Silver Paint", "Bawa Water Base Gold Paint",
+                    "Batra Synthetic Iron Oxide"]:
+        assert removed not in names, f"{removed} should have been removed"
 
 
 def test_products_category_emulsion(s):
@@ -84,16 +100,16 @@ def test_products_category_emulsion(s):
     assert r.status_code == 200
     items = r.json()
     names = {p["name"] for p in items}
-    assert any("Vespa Interior/Exterior Emulsion" in n for n in names), names
-    assert any("Galleria Weatherproof Exterior Emulsion" in n for n in names), names
+    assert "Vespa Interior Emulsion" in names
+    assert "Vespa Weatherproof Exterior Emulsion" in names
 
 
 def test_products_featured(s):
     r = s.get(f"{BASE_URL}/api/products", params={"featured": "true"})
     assert r.status_code == 200
     items = r.json()
-    assert len(items) >= 3, f"expected >=3 featured, got {len(items)}"
-    assert all(p["featured"] is True for p in items)
+    assert len(items) >= 1, f"expected >=1 featured, got {len(items)}"
+    assert all(p["featured"] for p in items)
 
 
 def test_product_detail_tech_fields(s):

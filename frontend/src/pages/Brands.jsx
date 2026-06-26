@@ -45,7 +45,7 @@ export default function Brands() {
             </div>
 
             {ROWS.map((row, i) => (
-              <CompareRow key={i} {...row} odd={i % 2 === 1} />
+              <CompareRow key={row.label} {...row} odd={i % 2 === 1} />
             ))}
           </div>
         </div>

@@ -29,8 +29,8 @@ export default function ProductDetail() {
               <div className="mt-10">
                 <div className="overline text-neutral-500 mb-5">Key features</div>
                 <div className="grid sm:grid-cols-2 gap-x-8 gap-y-3">
-                  {product.features.map((f, i) => (
-                    <div key={i} className="flex items-start gap-3 text-sm text-neutral-700">
+                  {product.features.map((f) => (
+                    <div key={f} className="flex items-start gap-3 text-sm text-neutral-700">
                       <Check size={16} className="mt-0.5 flex-shrink-0" style={{ color: "var(--navy)" }} />
                       <span>{f}</span>
                     </div>
