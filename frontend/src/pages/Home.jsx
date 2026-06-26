@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { ArrowRight, ArrowUpRight, ShieldCheck, Award, Factory, Beaker } from "lucide-react";
 import { api } from "../lib/api";
 
-const LOGO = "https://customer-assets.emergentagent.com/job_color-explorer-6/artifacts/iu3nu4xy_sm%20paints%20final%20logo%20more.png";
+const LOGO = "https://customer-assets.emergentagent.com/job_color-explorer-6/artifacts/fb9btnfx_WhatsApp%20Image%202026-06-26%20at%203.49.15%20PM.jpeg";
 
 export default function Home() {
   const [products, setProducts] = useState([]);
@@ -51,15 +51,15 @@ export default function Home() {
               <Stat n="40+" label="Years in business" />
               <Stat n="3" label="Brand portfolio" />
               <Stat n="116" label="Curated shades" />
-              <Stat n="19" label="Products" />
+              <Stat n="17" label="Products" />
             </div>
           </div>
 
           <div className="lg:col-span-5 fade-up">
             <div className="relative aspect-square">
-              {/* Navy block with logo */}
-              <div className="absolute inset-0 flex items-center justify-center" style={{ background: "var(--navy)" }}>
-                <img src={LOGO} alt="SM Paint Industries" className="w-3/4 h-3/4 object-contain" />
+              {/* Family product photo cover */}
+              <div className="absolute inset-0 overflow-hidden hairline" style={{ background: "var(--navy)" }}>
+                <img src={LOGO} alt="SM Paint Industries — Vespa & Galleria range" className="w-full h-full object-cover" data-testid="hero-cover-image" />
               </div>
               {/* Floating chip */}
               <div className="absolute -bottom-5 -left-5 bg-white border border-neutral-200 px-5 py-4 shadow-sm">
