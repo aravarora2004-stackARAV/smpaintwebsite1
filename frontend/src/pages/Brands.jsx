@@ -66,16 +66,14 @@ export default function Brands() {
             <Link to="/products?line=vespa" className="btn-line">Explore Vespa products <ArrowRight size={16} className="ml-2" /></Link>
           </div>
           <div className="lg:col-span-7 space-y-3">
-            <BrandRow name="Interior/Exterior Emulsion" desc="Versatile water-based wall emulsion" />
+            <BrandRow name="Interior Emulsion" desc="Versatile water-based interior emulsion" />
             <BrandRow name="Weatherproof Exterior Emulsion" desc="All-weather protection for façades" />
             <BrandRow name="Super Synthetic Enamel" desc="High-gloss multi-purpose enamel" />
             <BrandRow name="Red Oxide Primer" desc="Anti-corrosive metal primer" />
             <BrandRow name="White Primer" desc="Wood & wall primer with filler" />
             <BrandRow name="Blackboard Paint" desc="Chalk-receptive matt finish" />
-            <BrandRow name="Oil Bound Distemper" desc="Washable interior distemper" />
-            <BrandRow name="Synthetic Iron Oxide" desc="High-purity industrial pigment" />
+            <BrandRow name="Premium Acrylic Distemper" desc="Washable interior distemper" />
             <BrandRow name="Synthetic Clear Varnish" desc="Crystal-clear protective varnish" />
-            <BrandRow name="Hammertone Paint" desc="Decorative hammered metal finish" />
           </div>
         </div>
       </section>
@@ -122,7 +120,7 @@ const ROWS = [
   { label: "Pigments", vespa: "Standard", galleria: "High-opacity, fade-resistant" },
   { label: "Binder system", vespa: "Synthetic resin", galleria: "High-grade alkyd resin" },
   { label: "Weatherproof exterior emulsion", vespa: <Check size={16} className="mx-auto" />, galleria: <X size={16} className="mx-auto opacity-40" /> },
-  { label: "Hammertone finish", vespa: <Check size={16} className="mx-auto" />, galleria: <Check size={16} className="mx-auto" /> },
+  { label: "Hammertone finish", vespa: <X size={16} className="mx-auto opacity-40" />, galleria: <Check size={16} className="mx-auto" /> },
   { label: "Clear varnish", vespa: <Check size={16} className="mx-auto" />, galleria: <Check size={16} className="mx-auto" /> },
   { label: "Distemper option", vespa: <Check size={16} className="mx-auto" />, galleria: <X size={16} className="mx-auto opacity-40" /> },
 ];

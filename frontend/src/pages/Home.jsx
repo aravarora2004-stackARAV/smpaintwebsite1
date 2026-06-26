@@ -51,7 +51,7 @@ export default function Home() {
               <Stat n="40+" label="Years in business" />
               <Stat n="3" label="Brand portfolio" />
               <Stat n="116" label="Curated shades" />
-              <Stat n="21" label="Products" />
+              <Stat n="19" label="Products" />
             </div>
           </div>
 
@@ -121,7 +121,7 @@ export default function Home() {
                 Vespa delivers reliable, workhorse coatings for everyday industrial and decorative needs — trusted on construction sites, factories, and homes across India.
               </p>
               <div className="grid grid-cols-2 gap-y-3 text-sm border-t border-neutral-200 pt-5">
-                <div><div className="overline text-neutral-500 mb-1">Range</div><div>10 products</div></div>
+                <div><div className="overline text-neutral-500 mb-1">Range</div><div>8 products</div></div>
                 <div><div className="overline text-neutral-500 mb-1">Best for</div><div>Daily use</div></div>
                 <div><div className="overline text-neutral-500 mb-1">Coverage</div><div>12-15 m²/lt</div></div>
                 <div><div className="overline text-neutral-500 mb-1">Pricing</div><div>Workhorse value</div></div>
