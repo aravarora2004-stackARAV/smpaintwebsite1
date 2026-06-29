@@ -10,6 +10,7 @@ const links = [
   { to: "/brands", label: "Brands" },
   { to: "/products", label: "Products" },
   { to: SHADE_CARD_PDF, label: "Shade Card", external: true },
+  { to: "/visualizer", label: "Visualizer" },
   { to: "/gallery", label: "Gallery" },
   { to: "/contact", label: "Contact" },
 ];

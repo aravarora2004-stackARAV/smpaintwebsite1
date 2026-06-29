@@ -12,7 +12,7 @@ import ProductDetail from "./pages/ProductDetail";
 import Colors from "./pages/Colors";
 import Gallery from "./pages/Gallery";
 import Contact from "./pages/Contact";
-
+import Visualizer from "./pages/Visualizer";
 import AdminLogin from "./pages/admin/AdminLogin";
 import AdminLayout from "./pages/admin/AdminLayout";
 import AdminOverview from "./pages/admin/AdminOverview";
@@ -34,6 +34,7 @@ export default function App() {
           <Route path="/products/:id" element={withLayout(<ProductDetail />)} />
           <Route path="/colors" element={withLayout(<Colors />)} />
           <Route path="/gallery" element={withLayout(<Gallery />)} />
+          <Route path="/visualizer" element={withLayout(<Visualizer />)} />
           <Route path="/contact" element={withLayout(<Contact />)} />
 
           <Route path="/admin/login" element={<AdminLogin />} />
