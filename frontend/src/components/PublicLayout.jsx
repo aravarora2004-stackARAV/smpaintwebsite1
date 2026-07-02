@@ -10,7 +10,7 @@ const links = [
   { to: "/brands", label: "Brands" },
   { to: "/products", label: "Products" },
   { to: SHADE_CARD_PDF, label: "Shade Card", external: true },
-  { to: "/visualizer", label: "Visualizer" },
+  { to: "/visualizer", label: "Visualizer", navCta: true },
   { to: "/gallery", label: "Gallery" },
   { to: "/contact", label: "Contact" },
 ];
@@ -59,8 +59,8 @@ export function PublicLayout({ children }) {
             </span>
           </Link>
 
-          <nav className="hidden lg:flex items-center gap-9">
-            {links.map((l) => (
+          <nav className="hidden lg:flex items-center gap-7">
+            {links.filter((l) => !l.navCta).map((l) => (
               l.external ? (
                 <a
                   key={l.to}
@@ -83,6 +83,13 @@ export function PublicLayout({ children }) {
                 </Link>
               )
             ))}
+            <Link
+              to="/visualizer"
+              className={`btn-nav-visualizer ${loc.pathname === "/visualizer" ? "active" : ""}`}
+              data-testid="nav-visualizer"
+            >
+              Visualizer
+            </Link>
             <Link to="/contact" className="btn-solid !py-2.5 !px-5 text-xs" data-testid="nav-cta-quote">Request Quote</Link>
           </nav>
 
@@ -93,13 +100,20 @@ export function PublicLayout({ children }) {
         {open && (
           <div className="lg:hidden border-t" style={{ borderColor: "var(--border)" }}>
             <div className="px-6 py-6 flex flex-col gap-5">
-              {links.map((l) => (
+              {links.filter((l) => !l.navCta).map((l) => (
                 l.external ? (
                   <a key={l.to} href={l.to} target="_blank" rel="noreferrer" className="text-base font-semibold" data-testid={`nav-mobile-${l.label.toLowerCase().replace(/\s/g,'-')}`}>{l.label}</a>
                 ) : (
                   <Link key={l.to} to={l.to} className="text-base font-semibold" data-testid={`nav-mobile-${l.label.toLowerCase().replace(/\s/g,'-')}`}>{l.label}</Link>
                 )
               ))}
+              <Link
+                to="/visualizer"
+                className={`btn-nav-visualizer !py-3 text-center ${loc.pathname === "/visualizer" ? "active" : ""}`}
+                data-testid="nav-mobile-visualizer"
+              >
+                Visualizer
+              </Link>
               <Link to="/contact" className="btn-solid mt-2 text-center">Request Quote</Link>
             </div>
           </div>

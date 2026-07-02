@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, ArrowUpRight, ShieldCheck, Award, Factory, Beaker } from "lucide-react";
+import { ArrowRight, ArrowUpRight, ShieldCheck, Award, Factory, Beaker, Calendar, Layers, Handshake } from "lucide-react";
 import { api } from "../lib/api";
 
 const LOGO = "https://customer-assets.emergentagent.com/job_color-explorer-6/artifacts/fb9btnfx_WhatsApp%20Image%202026-06-26%20at%203.49.15%20PM.jpeg";
@@ -77,6 +77,22 @@ export default function Home() {
         </div>
       </section>
 
+      {/* TRUST / CREDIBILITY */}
+      <section
+        className="border-y bg-white"
+        style={{ borderColor: "var(--border)" }}
+        data-testid="trust-section"
+      >
+        <div className="max-w-7xl mx-auto px-6 lg:px-12 py-14 lg:py-16">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-8">
+            <TrustPoint icon={Calendar} title="Since 1983" desc="Four decades of coatings expertise from Chandni Chowk, Delhi." />
+            <TrustPoint icon={Factory} title="In-house manufacturing" desc="Formulated and produced at our own facility under strict quality control." />
+            <TrustPoint icon={Layers} title="Decorative & industrial coatings" desc="Emulsions, enamels, primers, and specialty finishes for every surface." />
+            <TrustPoint icon={Handshake} title="Trusted dealer/project supply" desc="Serving builders, contractors, dealers, and homeowners across India." />
+          </div>
+        </div>
+      </section>
+
       {/* COLOR STRIP — DRIPS */}
       <section style={{ background: "var(--ink)" }}>
         <div className="max-w-7xl mx-auto px-6 lg:px-12 py-6 flex items-center gap-6 overflow-x-auto">
@@ -107,7 +123,7 @@ export default function Home() {
 
         <div className="grid md:grid-cols-2 gap-6">
           {/* Vespa Card */}
-          <Link to="/products?line=vespa" className="relative bg-white border border-neutral-200 group hover:-translate-y-1 transition-transform overflow-hidden" data-testid="brand-card-vespa">
+          <Link to="/products?line=vespa" className="card-surface card-surface-brand group" data-testid="brand-card-vespa">
             <div className="aspect-[5/2] overflow-hidden" style={{ background: "#0A2E66" }}>
               <img src="https://customer-assets.emergentagent.com/job_color-explorer-6/artifacts/98kradn4_image.png" alt="Vespa Interior/Exterior Emulsion Paint" className="w-full h-full object-contain p-4" />
             </div>
@@ -133,7 +149,7 @@ export default function Home() {
           </Link>
 
           {/* Galleria Card */}
-          <Link to="/products?line=galleria" className="relative group hover:-translate-y-1 transition-transform overflow-hidden border" style={{ background: "var(--navy)", color: "#fff", borderColor: "var(--navy)" }} data-testid="brand-card-galleria">
+          <Link to="/products?line=galleria" className="card-surface card-surface-brand card-surface-dark group" data-testid="brand-card-galleria">
             <div className="aspect-[5/2] overflow-hidden">
               <img src="https://customer-assets.emergentagent.com/job_color-explorer-6/artifacts/czd1adua_image.png" alt="Galleria Weatherproof" className="w-full h-full object-contain p-4" />
             </div>
@@ -173,7 +189,7 @@ export default function Home() {
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 stagger">
             {products.map((p) => (
-              <Link to={`/products/${p.id}`} key={p.id} className="group block bg-white border border-neutral-200 hover:border-neutral-900 transition-colors" data-testid={`product-card-${p.id}`}>
+              <Link to={`/products/${p.id}`} key={p.id} className="card-surface card-surface-brand group block" data-testid={`product-card-${p.id}`}>
                 <div className="aspect-[4/3] overflow-hidden bg-neutral-100">
                   <img src={p.image_url} alt={p.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
                 </div>
@@ -254,6 +270,20 @@ function Feature({ icon: Icon, title, desc }) {
       <Icon size={22} strokeWidth={1.5} style={{ color: "var(--navy)" }} />
       <div className="font-display text-lg mt-4">{title}</div>
       <div className="text-sm text-neutral-600 mt-2 leading-relaxed">{desc}</div>
+    </div>
+  );
+}
+
+function TrustPoint({ icon: Icon, title, desc }) {
+  return (
+    <div className="flex gap-4">
+      <div className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-sm" style={{ background: "rgba(10, 46, 102, 0.06)" }}>
+        <Icon size={18} strokeWidth={1.5} style={{ color: "var(--navy)" }} />
+      </div>
+      <div>
+        <div className="font-display text-base" style={{ color: "var(--ink)" }}>{title}</div>
+        <div className="text-sm text-neutral-600 mt-1.5 leading-relaxed">{desc}</div>
+      </div>
     </div>
   );
 }

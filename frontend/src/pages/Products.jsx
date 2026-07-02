@@ -54,7 +54,7 @@ export default function Products() {
       ) : (
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 stagger">
           {filtered.map((p) => (
-            <Link key={p.id} to={`/products/${p.id}`} className="group block bg-white border border-neutral-200 hover:border-neutral-900 transition-colors" data-testid={`product-card-${p.id}`}>
+            <Link key={p.id} to={`/products/${p.id}`} className="card-surface card-surface-brand group block" data-testid={`product-card-${p.id}`}>
               <div className="aspect-[4/3] overflow-hidden bg-neutral-100 relative">
                 <img src={p.image_url} alt={p.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
                 {p.featured && <div className="absolute top-3 right-3 px-2 py-1 text-[10px] uppercase tracking-widest font-bold" style={{ background: "var(--paint-yellow)", color: "var(--navy)" }}>Featured</div>}
