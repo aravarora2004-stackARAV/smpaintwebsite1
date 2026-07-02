@@ -414,7 +414,7 @@ SEED_PRODUCTS = [
         "thinner": "Water (15-20% by volume)",
         "recommended_primer": "Vespa White Primer (new walls) or as required",
         "available_shades": "All shade card shades on tint base",
-        "image_url": "https://customer-assets.emergentagent.com/job_color-explorer-6/artifacts/168ncut8_image.png",
+       "image_url": "/products/vespa int emulsion.png",
         "featured": True, "sort_order": 1,
     },
     {
