@@ -252,7 +252,7 @@ async def site_config():
         "tagline": "Confidence of Quality & Durability | Since 1983",
         "headline": "Industrial Coatings. Engineered to Endure.",
         "established": os.environ.get("COMPANY_ESTABLISHED", "1983"),
-        "location": os.environ.get("COMPANY_LOCATION", "Chandni Chowk, New Delhi, India"),
+        "location": os.environ.get("COMPANY_LOCATION", " Village Ferozpur Bangar, Tehsil Kharkhoda, Dist. Sonipat - 131001, Haryana"),
         "email": os.environ.get("CONTACT_EMAIL", "smpaints2001@gmail.com"),
         "phone": os.environ.get("CONTACT_PHONE", "+91 76691 53715"),
         "whatsapp_number": os.environ.get("WHATSAPP_NUMBER", ""),

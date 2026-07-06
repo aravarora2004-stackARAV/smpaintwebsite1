@@ -48,7 +48,7 @@ export default function Contact() {
         <div className="mt-10 space-y-4">
           <Detail label="Email" value={site?.email || "smpaints2001@gmail.com"} />
           <Detail label="Phone" value={site?.phone || "+91 76691 53715"} />
-          <Detail label="Address" value={site?.location || "Chandni Chowk, Delhi"} />
+          <Detail label="Address" value={site?.location || "Village Ferozpur Bangar, Tehsil Kharkhoda, Dist. Sonipat - 131001, Haryana"} />
           <Detail label="WhatsApp" value={`+${site?.whatsapp_number || "917669153715"}`} />
           <Detail label="Hours" value="Mon — Sat, 10:00 to 19:00" />
         </div>

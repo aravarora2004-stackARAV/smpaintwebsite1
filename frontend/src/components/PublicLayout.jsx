@@ -156,7 +156,7 @@ export function PublicLayout({ children }) {
             <div className="text-sm text-white/80 space-y-1.5">
               <div><a href="mailto:smpaints2001@gmail.com" className="hover:text-[color:var(--paint-yellow)]">smpaints2001@gmail.com</a></div>
               <div><a href="tel:+917669153715" className="hover:text-[color:var(--paint-yellow)]">+91 76691 53715</a></div>
-              <div>Chandni Chowk, New Delhi · India</div>
+              <div>Village Ferozpur Bangar, Tehsil Kharkhoda, Dist. Sonipat - 131001, Haryana</div>
               <div className="pt-4">
                 <Link to="/admin/login" className="text-xs text-white/40 hover:text-white" data-testid="footer-admin-link">Dealer / Admin login</Link>
               </div>

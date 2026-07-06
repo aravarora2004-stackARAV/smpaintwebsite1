@@ -71,7 +71,7 @@ export default function Home() {
               </div>
               <div className="absolute -top-4 -right-4 px-3 py-1.5 text-[10px] uppercase tracking-[0.22em] font-bold" style={{ background: "var(--paint-yellow)", color: "var(--navy)" }}>
                 Since 1983
-              </div>
+              </div>Chandni
             </div>
           </div>
         </div>
@@ -85,7 +85,8 @@ export default function Home() {
       >
         <div className="max-w-7xl mx-auto px-6 lg:px-12 py-14 lg:py-16">
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-8">
-            <TrustPoint icon={Calendar} title="Since 1983" desc="Four decades of coatings expertise from Chandni Chowk, Delhi." />
+            <TrustPoint icon={Calendar} title="Since 1983" desc="Four decades of coatings expertise from Sonipat Haryana
+        ." />
             <TrustPoint icon={Factory} title="In-house manufacturing" desc="Formulated and produced at our own facility under strict quality control." />
             <TrustPoint icon={Layers} title="Decorative & industrial coatings" desc="Emulsions, enamels, primers, and specialty finishes for every surface." />
             <TrustPoint icon={Handshake} title="Trusted dealer/project supply" desc="Serving builders, contractors, dealers, and homeowners across India." />
