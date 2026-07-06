@@ -126,7 +126,7 @@ export default function Home() {
           {/* Vespa Card */}
           <Link to="/products?line=vespa" className="card-surface card-surface-brand group" data-testid="brand-card-vespa">
             <div className="aspect-[5/2] overflow-hidden" style={{ background: "#0A2E66" }}>
-              <img src="https://customer-assets.emergentagent.com/job_color-explorer-6/artifacts/98kradn4_image.png" alt="Vespa Interior/Exterior Emulsion Paint" className="w-full h-full object-contain p-4" />
+            <img src="/product-images/vespa-brand-card.png" alt="Vespa Interior/Exterior Emulsion Paint" className="w-full h-full object-contain p-4" />
             </div>
             <div className="p-8">
               <div className="flex items-start justify-between mb-4">
@@ -152,7 +152,7 @@ export default function Home() {
           {/* Galleria Card */}
           <Link to="/products?line=galleria" className="card-surface card-surface-brand card-surface-dark group" data-testid="brand-card-galleria">
             <div className="aspect-[5/2] overflow-hidden">
-              <img src="https://customer-assets.emergentagent.com/job_color-explorer-6/artifacts/czd1adua_image.png" alt="Galleria Weatherproof" className="w-full h-full object-contain p-4" />
+              <img src="/product-images/galleria-brand-card.png" alt="Galleria Weatherproof" className="w-full h-full object-contain p-4" />
             </div>
             <div className="p-8 relative">
               <div className="absolute top-0 right-0 w-32 h-32 opacity-20 pointer-events-none" style={{ background: "radial-gradient(circle at top right, var(--paint-yellow), transparent 70%)" }} />
