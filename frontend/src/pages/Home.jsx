@@ -9,6 +9,12 @@ export default function Home() {
   const [products, setProducts] = useState([]);
   const [colors, setColors] = useState([]);
   const [gallery, setGallery] = useState([]);
+  const projectVideos = [
+    "/project-media/project-video-1.mp4",
+    "/project-media/project-video-2.mp4",
+    "/project-media/project-video-3.mp4",
+    "/project-media/project-video-4.mp4",
+  ];
 
   useEffect(() => {
     api.get("/products?featured=true").then((r) => setProducts(r.data));
@@ -246,11 +252,22 @@ export default function Home() {
           <Link to="/gallery" className="text-sm flex items-center gap-1 hover:gap-2 transition-all" data-testid="see-gallery">Visit gallery <ArrowUpRight size={16} /></Link>
         </div>
         <div className="grid grid-cols-6 gap-4 stagger">
-          {gallery[0] && <Link to="/gallery" className="col-span-6 md:col-span-4 aspect-[16/10] overflow-hidden hairline"><img src={gallery[0].image_url} alt="" className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" /></Link>}
-          {gallery[1] && <Link to="/gallery" className="col-span-3 md:col-span-2 aspect-[4/5] overflow-hidden hairline"><img src={gallery[1].image_url} alt="" className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" /></Link>}
-          {gallery[2] && <Link to="/gallery" className="col-span-3 md:col-span-2 aspect-square overflow-hidden hairline"><img src={gallery[2].image_url} alt="" className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" /></Link>}
-          {gallery[3] && <Link to="/gallery" className="col-span-6 md:col-span-4 aspect-[16/9] overflow-hidden hairline"><img src={gallery[3].image_url} alt="" className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" /></Link>}
-        </div>
+  <div className="col-span-6 md:col-span-4 aspect-[16/10] overflow-hidden hairline bg-neutral-100">
+    <video src={projectVideos[0]} controls muted preload="metadata" className="w-full h-full object-cover" />
+  </div>
+
+  <div className="col-span-3 md:col-span-2 aspect-[4/5] overflow-hidden hairline bg-neutral-100">
+    <video src={projectVideos[1]} controls muted preload="metadata" className="w-full h-full object-cover" />
+  </div>
+
+  <div className="col-span-3 md:col-span-2 aspect-square overflow-hidden hairline bg-neutral-100">
+    <video src={projectVideos[2]} controls muted preload="metadata" className="w-full h-full object-cover" />
+  </div>
+
+  <div className="col-span-6 md:col-span-4 aspect-[16/9] overflow-hidden hairline bg-neutral-100">
+    <video src={projectVideos[3]} controls muted preload="metadata" className="w-full h-full object-cover" />
+  </div>
+</div>
       </section>
 
       {/* CTA */}
