@@ -43,10 +43,24 @@ export default function Home() {
               <span className="font-semibold"> Galleria</span> for premium, specification-grade finishes.
             </p>
             <div className="mt-9 flex items-center gap-4 flex-wrap">
-              <Link to="/products" className="btn-solid" data-testid="hero-cta-products">View Catalogue <ArrowRight size={16} className="ml-2" /></Link>
-              <a href="https://drive.google.com/file/d/1l96sYgM3wdMgGpdAs842_eAFRJDGB8xl/view" target="_blank" rel="noreferrer" className="btn-line" data-testid="hero-cta-colors">Open Shade Card</a>
-            </div>
+  <Link to="/products" className="btn-solid" data-testid="hero-cta-products">
+    View Catalogue <ArrowRight size={16} className="ml-2" />
+  </Link>
 
+  <a
+    href="https://drive.google.com/file/d/1196sYgM3wdMgGpdAs842_eAFRJDG8x1/view"
+    target="_blank"
+    rel="noreferrer"
+    className="btn-line"
+    data-testid="hero-cta-colors"
+  >
+    Open Shade Card <ArrowRight size={16} className="ml-2" />
+  </a>
+
+  <Link to="/visualizer" className="btn-line" data-testid="hero-cta-visualizer">
+    Try Visualizer <ArrowRight size={16} className="ml-2" />
+  </Link>
+</div>
             <div className="mt-12 grid grid-cols-2 sm:grid-cols-4 gap-6 max-w-2xl">
               <Stat n="40+" label="Years in business" />
               <Stat n="3" label="Brand portfolio" />
