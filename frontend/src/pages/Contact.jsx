@@ -26,8 +26,21 @@ export default function Contact() {
       const payload = { ...form };
       if (!payload.email) delete payload.email;
       await api.post("/inquiries", payload);
-      setDone(true);
-      toast.success("Inquiry received. We'll be in touch within 24 hours.");
+setDone(true);
+
+const whatsappMessage = encodeURIComponent(
+  `New quote request from SM Paint website:
+Name: ${payload.name}
+Phone: ${payload.phone}
+Email: ${payload.email || "Not provided"}
+City: ${payload.city || "Not provided"}
+Product: ${payload.product_interest || "Not provided"}
+Message: ${payload.message || "Not provided"}`
+);
+
+window.open(`https://wa.me/917669153715?text=${whatsappMessage}`, "_blank");
+
+toast.success("Inquiry received. WhatsApp message opened.");
     } catch (err) {
       toast.error(err.response?.data?.detail?.toString() || "Could not send. Try again.");
     } finally {

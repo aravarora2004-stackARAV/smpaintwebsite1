@@ -7,6 +7,50 @@ export default function Gallery() {
   const [active, setActive] = useState(null);
 
   useEffect(() => { api.get("/gallery").then((r) => setItems(r.data)); }, []);
+  const projectVideos = [
+  {
+    src: "/project-media/project-video-1.mp4",
+    title: "VESPA PO Red Paint",
+    subtitle: "Scaffolding, Industrial Use",
+    desc: "Built for industrial scaffolding structures, VESPA PO Red Paint delivers a high-gloss finish with excellent viscosity for smooth, even application. It is engineered to handle tough job-site conditions while staying one of the most competitively priced options in its category — no compromise on finish quality.",
+  },
+  {
+    src: "/project-media/project-video-2.mp4",
+    title: "VESPA Oil Bound White Distemper",
+    subtitle: "Factory Walls",
+    desc: "Applied across the walls of a brand-new factory project, VESPA OBD gives large industrial spaces a clean, bright white finish. A practical, cost-effective choice for covering expansive factory walls with smooth, consistent coverage.",
+  },
+  {
+    src: "/project-media/project-video-3.mp4",
+    title: "VESPA White Paint",
+    subtitle: "Staircase, Residential Interior Emulsion",
+    desc: "A VESPA Interior Emulsion in crisp white, applied to a residential staircase. The smooth, uniform finish is built for high-traffic interior spaces that need to stay looking clean and bright, wear after wear.",
+  },
+  {
+    src: "/project-media/project-video-4.mp4",
+    title: "VESPA Interior Emulsion",
+    subtitle: "Morning Glory Shade, Residential Matte Finish",
+    desc: "Finished in VESPA's Morning Glory shade, this residential application showcases a soft matte finish with rich, even color depth. Delivered at an affordable price point, it left the customer completely satisfied — both in look and value.",
+  },
+  {
+    src: "/project-media/project-video-5.mp4",
+    title: "VESPA Interior Emulsion",
+    subtitle: "Ice Crystal for Ceiling, Enlighten for Walls",
+    desc: "Two VESPA Interior Emulsion shades — Ice Crystal on the ceiling, Enlighten on the walls — matched to perfection for a seamless look throughout the room. The result: a flawless matte finish with 100% quality consistency across both surfaces.",
+  },
+  {
+    src: "/project-media/project-video-6.mp4",
+    title: "GALLERIA Clear Varnish",
+    subtitle: "Wooden Furniture",
+    desc: "GALLERIA Clear Varnish brings out the natural wood grain with a rich, glass-like gloss on this outdoor table. It protects against daily wear while enhancing the wood's warmth and shine — ideal for furniture that needs to look as good as it holds up.",
+  },
+  {
+    src: "/project-media/project-video-7.mp4",
+    title: "GALLERIA Red Oxide Primer",
+    subtitle: "Metal Surface, Industrial Spray Application",
+    desc: "Applied via spray on industrial metal surfaces, GALLERIA Red Oxide Primer lays down a smooth, high-gloss base coat built for durability. Excellent sprayability made for a fast, flawless application — with fantastic end results.",
+  },
+];
 
   return (
     <div data-testid="gallery-page">
@@ -14,52 +58,49 @@ export default function Gallery() {
         <div className="overline text-neutral-500 mb-3">In Place</div>
         <h1 className="font-display text-5xl sm:text-6xl tracking-tight">Projects & inspiration</h1>
         <p className="mt-4 text-neutral-600 max-w-2xl">Selected residential, commercial, and heritage projects finished in Chroma palettes.</p>
-      </section>
-
-      <section className="max-w-7xl mx-auto px-6 lg:px-12 pb-24">
-        <div className="grid grid-cols-6 gap-4 stagger">
-          {items.map((g, idx) => {
-            const shapes = [
-              "col-span-6 md:col-span-4 aspect-[16/10]",
-              "col-span-3 md:col-span-2 aspect-[4/5]",
-              "col-span-3 md:col-span-2 aspect-square",
-              "col-span-6 md:col-span-4 aspect-[16/9]",
-            ];
-            const span = shapes[idx % shapes.length];
-            return (
-              <button
-                key={g.id}
-                className={`${span} overflow-hidden hairline relative group`}
-                onClick={() => setActive(g)}
-                data-testid={`gallery-item-${g.id}`}
-              >
-                <img src={g.image_url} alt={g.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
-                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors flex items-end p-5">
-                  <div className="text-white opacity-0 group-hover:opacity-100 transition-opacity">
-                    <div className="overline">{g.space}</div>
-                    <div className="font-display text-2xl">{g.title}</div>
-                  </div>
-                </div>
-              </button>
-            );
-          })}
-        </div>
-        {items.length === 0 && <div className="text-center text-neutral-500 py-20" data-testid="gallery-empty">No gallery items yet.</div>}
-      </section>
-
-      {active && (
-        <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-6" onClick={() => setActive(null)} data-testid="gallery-lightbox">
-          <button className="absolute top-6 right-6 text-white" onClick={() => setActive(null)} data-testid="lightbox-close"><X size={28} /></button>
-          <div className="max-w-5xl w-full" onClick={(e) => e.stopPropagation()}>
-            <img src={active.image_url} alt={active.title} className="w-full max-h-[80vh] object-contain" />
-            <div className="text-white mt-5">
-              <div className="overline text-neutral-400">{active.space}</div>
-              <div className="font-display text-3xl mt-1">{active.title}</div>
-              {active.description && <div className="text-neutral-300 mt-2 max-w-2xl">{active.description}</div>}
-            </div>
-          </div>
-        </div>
-      )}
+      </section> <section className="max-w-7xl mx-auto px-6 lg:px-12 pb-20">
+  <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-8">
+    <div>
+      <div className="overline text-neutral-500 mb-3">Real project media</div>
+      <h2 className="font-display text-4xl tracking-tight">Projects we’ve coated</h2>
+      <p className="mt-3 text-neutral-600 max-w-2xl">
+        Real videos from coated sites, product applications, and finished surfaces using SM Paint Industries coatings.
+      </p>
     </div>
+  </div>
+
+  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {projectVideos.map((video, index) => (
+      <div key={video.src} className="card-surface card-surface-brand overflow-hidden bg-white">
+        <div className="aspect-[4/5] bg-neutral-100">
+          <video
+            src={video.src}
+            controls
+            preload="metadata"
+            className="w-full h-full object-cover"
+            data-testid={`project-video-${index + 1}`}
+          />
+        </div>
+        <div className="p-5 bg-white border border-neutral-200">
+  <div className="overline text-neutral-500 mb-2">Project Testimonial</div>
+  <h3 className="font-display text-2xl" style={{ color: "var(--ink)" }}>
+    {video.title}
+  </h3>
+  <div className="mt-1 text-sm font-semibold" style={{ color: "var(--navy)" }}>
+    {video.subtitle}
+  </div>
+  <p className="mt-3 text-sm text-neutral-600 leading-relaxed">
+    {video.desc}
+  </p>
+</div>
+      </div>
+    ))}
+  </div>
+</section>
+</div>
   );
 }
+
+     
+
+     

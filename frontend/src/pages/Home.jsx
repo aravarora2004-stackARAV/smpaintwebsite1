@@ -14,7 +14,10 @@ export default function Home() {
     "/project-media/project-video-2.mp4",
     "/project-media/project-video-3.mp4",
     "/project-media/project-video-4.mp4",
-  ];
+    "/project-media/project-video-5.mp4",
+    "/project-media/project-video-6.mp4",
+    "/project-media/project-video-7.mp4",
+    ];
 
   useEffect(() => {
     api.get("/products?featured=true").then((r) => setProducts(r.data));
@@ -31,7 +34,7 @@ export default function Home() {
     <div data-testid="home-page">
       {/* HERO */}
       <section className="relative overflow-hidden" data-testid="hero-section" style={{ background: "var(--bg)" }}>
-        <div className="max-w-7xl mx-auto px-6 lg:px-12 pt-14 pb-20 lg:pt-20 lg:pb-28 grid lg:grid-cols-12 gap-10 lg:gap-16 items-end">
+        <div className="max-w-7xl mx-auto px-6 lg:px-12 pt-14 pb-20 lg:pt-20 lg:pb-28 grid lg:grid-cols-12 gap-10 lg:gap-16 items-start">
           <div className="lg:col-span-7 fade-up">
             <div className="flex items-center gap-3 mb-6">
               <span className="overline" style={{ color: "var(--navy)" }}>Est. 1983</span>
@@ -66,6 +69,40 @@ export default function Home() {
   <Link to="/visualizer" className="btn-line" data-testid="hero-cta-visualizer">
     Try Visualizer <ArrowRight size={16} className="ml-2" />
   </Link>
+</div>
+{/* WHY CHOOSE US */}
+<div className="mt-10 p-6 lg:p-7 bg-white border border-neutral-200 shadow-sm">
+  <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4 mb-6">
+    <div>
+      <div className="overline text-neutral-500 mb-2">Why choose us</div>
+      <h2 className="font-display text-3xl tracking-tight" style={{ color: "var(--ink)" }}>
+        Why Choose SM Paints?
+      </h2>
+    </div>
+    <p className="text-sm text-neutral-600 max-w-xl leading-relaxed">
+      Premium coating quality with better value, flexible supply, and shade support for dealers,
+      contractors, and project clients.
+    </p>
+  </div>
+
+  <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    {[
+      ["30% Lower Rates", "Compared to top market brands without compromising product performance."],
+      ["120+ Shades Available", "A wide shade range for interiors, exteriors, and decorative finishes."],
+      ["No MOQ Flexibility", "Order based on project or dealer requirement without heavy minimum quantity pressure."],
+      ["Custom Designing & Shades", "Custom shade matching and product support available for specific project needs."],
+      ["More Coverage", "Formulated to deliver better coverage compared to regular industry-standard coatings."],
+      ["German-Tech Pigments", "Made using high-quality pigments for stronger colour performance and durability."],
+      ["Pan-India Delivery", "Reliable supply support for dealers, contractors, and project requirements across India."],
+    ].map(([title, desc]) => (
+      <div key={title} className="p-4 border border-neutral-200 bg-neutral-50">
+        <div className="text-sm font-semibold" style={{ color: "var(--navy)" }}>
+          {title}
+        </div>
+        <p className="mt-2 text-xs text-neutral-600 leading-relaxed">{desc}</p>
+      </div>
+    ))}
+  </div>
 </div>
             <div className="mt-12 grid grid-cols-2 sm:grid-cols-4 gap-6 max-w-2xl">
               <Stat n="40+" label="Years in business" />
