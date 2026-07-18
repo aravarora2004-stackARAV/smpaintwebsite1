@@ -249,9 +249,9 @@ async def create_inquiry(body: InquiryIn):
 async def site_config():
     return {
         "brand": "SM Paint Industries",
-        "tagline": "Confidence of Quality & Durability | Since 1983",
+        "tagline": "Confidence of Quality & Durability | Since 2001",
         "headline": "Industrial Coatings. Engineered to Endure.",
-        "established": os.environ.get("COMPANY_ESTABLISHED", "1983"),
+        "established": os.environ.get("COMPANY_ESTABLISHED", "2001"),
         "location": os.environ.get("COMPANY_LOCATION", " Village Ferozpur Bangar, Tehsil Kharkhoda, Dist. Sonipat - 131001, Haryana"),
         "email": os.environ.get("CONTACT_EMAIL", "smpaints2001@gmail.com"),
         "phone": os.environ.get("CONTACT_PHONE", "+91 76691 53715"),
@@ -414,7 +414,7 @@ SEED_PRODUCTS = [
         "thinner": "Water (15-20% by volume)",
         "recommended_primer": "Vespa White Primer (new walls) or as required",
         "available_shades": "All shade card shades on tint base",
-       "image_url": "/products/vespa int emulsion.png",
+       "image_url": "/product-images/vespa int emulsion.png",
         "featured": True, "sort_order": 1,
     },
     {
