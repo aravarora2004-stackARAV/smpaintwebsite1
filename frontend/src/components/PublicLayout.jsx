@@ -19,7 +19,7 @@ const LOGO_URL = "https://customer-assets.emergentagent.com/job_color-explorer-6
 
 export function PublicLayout({ children }) {
   const [open, setOpen] = useState(false);
-  const [cfg, setCfg] = useState({ brand: "SM Paint Industries", tagline: "Confidence of Quality & Durability | Since 1983", whatsapp_number: "", logo_url: LOGO_URL });
+  const [cfg, setCfg] = useState({ brand: "SM Paint Industries", tagline: "Confidence of Quality & Durability | Since 2001", whatsapp_number: "", logo_url: LOGO_URL });
   const loc = useLocation();
 
   useEffect(() => {
@@ -32,7 +32,7 @@ export function PublicLayout({ children }) {
       {/* Top bar — tagline */}
       <div className="hidden md:block" style={{ background: "var(--navy)", color: "#fff" }}>
         <div className="max-w-7xl mx-auto px-6 lg:px-12 h-9 flex items-center justify-between text-[11px] tracking-[0.18em] uppercase font-medium">
-          <span>{cfg.tagline}</span>
+        <span>Confidence of Quality & Durability | Since 2001</span>
           <span className="flex items-center gap-6">
             <a href={`mailto:${cfg.email || "smpaints2001@gmail.com"}`} className="hover:text-[color:var(--paint-yellow)] normal-case tracking-normal text-[12px]">{cfg.email || "smpaints2001@gmail.com"}</a>
             <span style={{ color: "var(--paint-yellow)" }}>·</span>
@@ -132,11 +132,11 @@ export function PublicLayout({ children }) {
               </span>
               <div>
                 <div className="font-display text-lg">SM PAINT INDUSTRIES</div>
-                <div className="text-[10px] tracking-[0.22em] uppercase text-white/60 mt-1">Industrial Coatings · Est. 1983</div>
+                <div className="text-[10px] tracking-[0.22em] uppercase text-white/60 mt-1">Industrial Coatings · Est.2001 </div>
               </div>
             </div>
             <p className="text-sm text-white/70 max-w-md leading-relaxed">
-              Manufacturers of industrial and decorative coatings under the <span className="text-white font-semibold">Vespa</span> and <span className="text-white font-semibold">Galleria</span> lines. Engineered to endure — trusted by builders, contractors, and homeowners across India for over four decades.
+              Manufacturers of industrial and decorative coatings under the <span className="text-white font-semibold">Vespa</span> and <span className="text-white font-semibold">Galleria</span> lines. Engineered to endure — trusted by builders, contractors, and homeowners across India for over 25 years.
             </p>
           </div>
           <div className="md:col-span-3">
@@ -166,7 +166,7 @@ export function PublicLayout({ children }) {
         <div className="border-t border-white/10">
           <div className="max-w-7xl mx-auto px-6 lg:px-12 py-5 text-xs text-white/50 flex flex-col md:flex-row justify-between gap-2">
             <span>© {new Date().getFullYear()} SM Paint Industries. All rights reserved.</span>
-            <span className="font-mono">CONFIDENCE OF QUALITY · DURABILITY · SINCE 1983</span>
+            <span className="font-mono">CONFIDENCE OF QUALITY · DURABILITY · SINCE 2001</span>
           </div>
         </div>
       </footer>

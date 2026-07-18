@@ -37,7 +37,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-6 lg:px-12 pt-14 pb-20 lg:pt-20 lg:pb-28 grid lg:grid-cols-12 gap-10 lg:gap-16 items-start">
           <div className="lg:col-span-7 fade-up">
             <div className="flex items-center gap-3 mb-6">
-              <span className="overline" style={{ color: "var(--navy)" }}>Est. 1983</span>
+              <span className="overline" style={{ color: "var(--navy)" }}>Est. 2001</span>
               <span className="w-12 h-px bg-neutral-400" />
               <span className="overline text-neutral-500">Manufactured in India</span>
             </div>
@@ -105,7 +105,7 @@ export default function Home() {
   </div>
 </div>
             <div className="mt-12 grid grid-cols-2 sm:grid-cols-4 gap-6 max-w-2xl">
-              <Stat n="40+" label="Years in business" />
+              <Stat n="25+" label="Years in business" />
               <Stat n="3" label="Brand portfolio" />
               <Stat n="116" label="Curated shades" />
               <Stat n="17" label="Products" />
@@ -127,7 +127,7 @@ export default function Home() {
                 </div>
               </div>
               <div className="absolute -top-4 -right-4 px-3 py-1.5 text-[10px] uppercase tracking-[0.22em] font-bold" style={{ background: "var(--paint-yellow)", color: "var(--navy)" }}>
-                Since 1983
+                Since 2001
               </div>Chandni
             </div>
           </div>
@@ -142,7 +142,7 @@ export default function Home() {
       >
         <div className="max-w-7xl mx-auto px-6 lg:px-12 py-14 lg:py-16">
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-8">
-            <TrustPoint icon={Calendar} title="Since 1983" desc="Four decades of coatings expertise from Sonipat Haryana
+            <TrustPoint icon={Calendar} title="Since 2001" desc="25+ years of coatings expertise from Sonipat Haryana
         ." />
             <TrustPoint icon={Factory} title="In-house manufacturing" desc="Formulated and produced at our own facility under strict quality control." />
             <TrustPoint icon={Layers} title="Decorative & industrial coatings" desc="Emulsions, enamels, primers, and specialty finishes for every surface." />
@@ -272,7 +272,7 @@ export default function Home() {
       {/* WHY US */}
       <section className="max-w-7xl mx-auto px-6 lg:px-12 py-24">
         <div className="grid md:grid-cols-4 gap-8">
-          <Feature icon={Factory} title="Made since 1983" desc="Four decades of in-house manufacturing from Chandni Chowk, Delhi." />
+          <Feature icon={Factory} title="Made since 2001" desc="25+ years of in-house manufacturing from Sonipat, Haryana." />
           <Feature icon={Beaker} title="Engineered formulas" desc="Continuously upgraded under rigorous quality control." />
           <Feature icon={ShieldCheck} title="Corrosion resistant" desc="Specification-grade primers and protective coatings." />
           <Feature icon={Award} title="DO IT RIGHT" desc="Our manufacturing creed — don't regret a single coat." />
