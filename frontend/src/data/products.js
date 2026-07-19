@@ -1,4 +1,5 @@
-export const localProducts = [{
+const rawProducts = [
+    {
     "name": "Vespa Interior Emulsion",
     "line": "vespa", "category": "emulsion", "finish": "matte",
     "short_description": "Versatile water-based interior emulsion for living rooms, bedrooms & offices.",
@@ -10,9 +11,10 @@ export const localProducts = [{
     "pack_sizes": ["1 lt", "4 lt", "10 lt", "20 lt"],
     "thinner": "Water (15-20% by volume)",
     "recommended_primer": "Vespa White Primer (new walls) or as required",
-    "available_shades": "All shade card shades on tint base",
-   "image_url": "/product-images/vespa int emulsion.png",
-    "featured": true, "sort_order": 1,
+   "available_shades": "All shade card shades on tint base",
+"image_url": "/product-images/vespa int emulsion.png",
+"featured": true,
+"sort_order": 1,
 },
 {
     "name": "Vespa Weatherproof Exterior Emulsion",
@@ -277,3 +279,14 @@ export const localProducts = [{
 },
 
 ];
+const slugify = (value) =>
+    value
+      .toLowerCase()
+      .replace(/&/g, "and")
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/(^-|-$)/g, "");
+  
+  export const localProducts = rawProducts.map((product) => ({
+    ...product,
+    id: product.id || slugify(product.name),
+  }));
