@@ -1,22 +1,19 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
-import { api } from "../lib/api";
+import { localProducts } from "../data/products";
 
 const LINES = ["all", "vespa", "galleria", "general"];
 const CATEGORIES = ["all", "emulsion", "enamel", "primer", "distemper", "varnish", "industrial", "specialty", "waterproofing"];
 
 export default function Products() {
-  const [products, setProducts] = useState([]);
+  const products = localProducts;
   const [params, setParams] = useSearchParams();
   const line = params.get("line") || "all";
   const category = params.get("category") || "all";
-  const [loading, setLoading] = useState(true);
+  const loading = false;
 
-  useEffect(() => {
-    setLoading(true);
-    api.get("/products").then((r) => setProducts(r.data)).finally(() => setLoading(false));
-  }, []);
+ 
 
   const filtered = useMemo(() => {
     return products.filter((p) =>

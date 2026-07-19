@@ -1,13 +1,14 @@
-import { useEffect, useState } from "react";
+import { useMemo } from "react";
 import { Link, useParams } from "react-router-dom";
 import { ArrowLeft, ArrowRight, Check } from "lucide-react";
-import { api } from "../lib/api";
+import { localProducts } from "../data/products";
 
 export default function ProductDetail() {
   const { id } = useParams();
-  const [product, setProduct] = useState(null);
-
-  useEffect(() => { api.get(`/products/${id}`).then((r) => setProduct(r.data)); }, [id]);
+  const product = useMemo(
+  () => localProducts.find((p) => p.id === id),
+  [id]
+);
 
   if (!product) return <div className="max-w-7xl mx-auto px-6 lg:px-12 py-24" data-testid="product-loading">Loading…</div>;
 
