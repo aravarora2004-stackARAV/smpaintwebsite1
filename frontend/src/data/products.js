@@ -62,7 +62,7 @@ export const localProducts = [{
     "recommended_primer": "—",
     "available_shades": "Red Oxide",
     "image_url": "https://customer-assets.emergentagent.com/job_color-explorer-6/artifacts/i8e381lb_image.png",
-    "featured": False, "sort_order": 4,
+    "featured": false, "sort_order": 4,
 },
 {
     "name": "Vespa White Primer",
@@ -78,7 +78,7 @@ export const localProducts = [{
     "recommended_primer": "—",
     "available_shades": "White, Pink",
     "image_url": "https://customer-assets.emergentagent.com/job_color-explorer-6/artifacts/nka95sbo_image.png",
-    "featured": False, "sort_order": 5,
+    "featured": false, "sort_order": 5,
 },
 {
     "name": "Vespa Blackboard Paint",
@@ -94,7 +94,7 @@ export const localProducts = [{
     "recommended_primer": "Vespa White Primer",
     "available_shades": "Matt Black, Matt Green",
     "image_url": "https://customer-assets.emergentagent.com/job_color-explorer-6/artifacts/2cd5csd2_image.png",
-    "featured": False, "sort_order": 6,
+    "featured": false, "sort_order": 6,
 },
 {
     "name": "Vespa Premium Acrylic Distemper",
@@ -110,7 +110,7 @@ export const localProducts = [{
     "recommended_primer": "Vespa White Primer (especially for new walls)",
     "available_shades": "Luxurious pastel range",
     "image_url": "https://customer-assets.emergentagent.com/job_color-explorer-6/artifacts/k1vg5t3x_image.png",
-    "featured": False, "sort_order": 7,
+    "featured": false, "sort_order": 7,
 },
 {
     "name": "Vespa Black Rubber Seal",
@@ -160,7 +160,7 @@ export const localProducts = [{
     "recommended_primer": "—",
     "available_shades": "White, Pink",
     "image_url": "https://customer-assets.emergentagent.com/job_color-explorer-6/artifacts/fxk15urd_image.png",
-    "featured": False, "sort_order": 12,
+    "featured": false, "sort_order": 12,
 },
 {
     "name": "Galleria Red Oxide Primer",
@@ -176,7 +176,7 @@ export const localProducts = [{
     "recommended_primer": "—",
     "available_shades": "Red Oxide",
     "image_url": "https://customer-assets.emergentagent.com/job_color-explorer-6/artifacts/72v7y4e7_image.png",
-    "featured": False, "sort_order": 13,
+    "featured": false, "sort_order": 13,
 },
 {
     "name": "Galleria Blackboard Paint",
@@ -192,7 +192,7 @@ export const localProducts = [{
     "recommended_primer": "Galleria White Primer",
     "available_shades": "Matt Black, Matt Green",
     "image_url": "https://customer-assets.emergentagent.com/job_color-explorer-6/artifacts/4s94axvn_image.png",
-    "featured": False, "sort_order": 14,
+    "featured": false, "sort_order": 14,
 },
 // ============ GENERAL / SISTER BRAND ============
 {
@@ -209,7 +209,7 @@ export const localProducts = [{
     "recommended_primer": "—",
     "available_shades": "Clear / Transparent",
     "image_url": "https://customer-assets.emergentagent.com/job_color-explorer-6/artifacts/7pcby4gp_image.png",
-    "featured": False, "sort_order": 9,
+    "featured": false, "sort_order": 9,
 },
 {
     "name": "Galleria Synthetic Clear Varnish",
@@ -225,7 +225,7 @@ export const localProducts = [{
     "recommended_primer": "—",
     "available_shades": "Clear / Transparent",
     "image_url": "https://customer-assets.emergentagent.com/job_color-explorer-6/artifacts/ewo0luz1_image.png",
-    "featured": False, "sort_order": 17,
+    "featured": false, "sort_order": 17,
 },
 {
     "name": "Galleria Hammertone Paint",
